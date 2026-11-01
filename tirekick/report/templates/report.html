@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TireKick report · {{ deal.deal_id }}</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#ffffff; --ink:#1c1c1a; --muted:#6b6a64; --line:#e4e2dc;
+          --red:#c4352b; --red-bg:#fbebeb; --yellow:#a86a00; --yellow-bg:#fbf1dc; --green:#2f7d3a; --green-bg:#e7f4e6; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  .brand { font-weight:700; letter-spacing:.02em; color:var(--muted); font-size:14px; }
+  h1 { font-size: 28px; margin: 6px 0 4px; }
+  .badge { display:inline-block; padding:4px 12px; border-radius:999px; font-weight:700; font-size:14px; }
+  .badge.red { background:var(--red-bg); color:var(--red); } .badge.yellow { background:var(--yellow-bg); color:var(--yellow); }
+  .badge.green { background:var(--green-bg); color:var(--green); }
+  .prices { display:flex; gap:24px; flex-wrap:wrap; margin:16px 0 24px; }
+  .prices div { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 16px; min-width:160px; }
+  .prices small { color:var(--muted); display:block; }
+  .prices b { font-size:22px; }
+  h2 { font-size:18px; margin:32px 0 12px; }
+  .card { background:var(--card); border:1px solid var(--line); border-left:6px solid var(--line); border-radius:12px;
+          padding:14px 16px; margin-bottom:12px; display:grid; grid-template-columns: 1fr auto; gap:12px; }
+  .card.red { border-left-color:var(--red); } .card.yellow { border-left-color:var(--yellow); } .card.green { border-left-color:var(--green); }
+  .card img { width:180px; max-width:40vw; border-radius:8px; border:1px solid var(--line); }
+  .meta { color:var(--muted); font-size:13px; }
+  .chip { display:inline-block; font-size:12px; border:1px solid var(--line); border-radius:999px; padding:1px 8px; margin-right:6px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); font-size:14px; vertical-align:top; }
+  .bubble { max-width:80%; padding:8px 12px; border-radius:12px; margin:6px 0; background:var(--card); border:1px solid var(--line); }
+  .bubble.tirekick { margin-left:auto; background:#e8f0fe; }
+  footer { margin-top:40px; color:var(--muted); font-size:13px; }
+  @media (max-width: 560px) { .card { grid-template-columns: 1fr; } .card img { width:100%; max-width:100%; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">TIREKICK · {{ deal.deal_id }}</div>
+  {% if not report %}
+    <h1>Waiting for the seller's proof video…</h1>
+    <p class="meta">Status: {{ deal.status.value | replace("_", " ") }}</p>
+  {% else %}
+    {% set d = report.vin_decode %}
+    <h1>{{ (d.year if d and d.year else report.listing.year) or "" }} {{ (d.make if d and d.make else report.listing.make) or "" }}
+        {{ (d.model if d and d.model else report.listing.model) or "" }} {{ (d.trim if d and d.trim else "") }}</h1>
+    <span class="badge {{ report.verdict.value }}">
+      {% if report.verdict.value == "red" %}Walk away{% elif report.verdict.value == "yellow" %}Negotiate with care{% else %}Looks clean{% endif %}
+    </span>
+    <div class="prices">
+      <div><small>Asking</small><b>{{ money(report.listing.asking_price, report.listing.currency) }}</b></div>
+      <div><small>Fair range</small><b>{{ money(report.fair_price_low, report.listing.currency) }}–{{ money(report.fair_price_high, report.listing.currency) }}</b></div>
+      {% if d %}<div><small>VIN</small><b style="font-size:15px">{{ d.vin }}</b></div>{% endif %}
+    </div>
+
+    <h2>Evidence</h2>
+    {% for e in evidence %}
+      <div class="card {{ e.severity.value }}">
+        <div>
+          <b>{{ e.summary }}</b>
+          {% if e.detail %}<div>{{ e.detail }}</div>{% endif %}
+          <div class="meta"><span class="chip">{{ e.id }}</span><span class="chip">{{ e.source.value | replace("_", " ") }}</span>
+            {% if e.clip_start_s is not none %}at {{ "%d:%02d"|format((e.clip_start_s // 60)|int, (e.clip_start_s % 60)|int) }}{% endif %}</div>
+        </div>
+        {% set url = frame_url(e) %}{% if url %}<img src="{{ url }}" alt="Frame for {{ e.id }}">{% endif %}
+      </div>
+    {% endfor %}
+
+    {% if report.recalls %}
+      <h2>Recalls for this model</h2>
+      <table><tr><th>Campaign</th><th>Component</th><th>Summary</th></tr>
+      {% for r in report.recalls %}<tr><td>{{ r.campaign_number }}</td><td>{{ r.component }}</td><td>{{ r.summary }}</td></tr>{% endfor %}
+      </table>
+      <p class="meta">These are recalls issued for this year, make and model. Check whether this VIN's recalls were repaired at nhtsa.gov/recalls.</p>
+    {% endif %}
+
+    {% if deal.negotiation and deal.negotiation.turns %}
+      <h2>Negotiation</h2>
+      {% for t in deal.negotiation.turns %}<div class="bubble {{ t.role.value }}">{{ t.text }}</div>{% endfor %}
+    {% endif %}
+
+    {% if report.inspection_questions %}
+      <h2>Questions for the pre-purchase inspection</h2>
+      <ul>{% for q in report.inspection_questions %}<li>{{ q }}</li>{% endfor %}</ul>
+    {% endif %}
+  {% endif %}
+  <footer>TireKick is not a mechanical inspection. Get an independent pre-purchase inspection before you pay.</footer>
+</main>
+</body>
+</html>

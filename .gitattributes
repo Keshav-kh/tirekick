@@ -1,0 +1,4 @@
+# Same line endings for everyone (Windows + macOS teammates) so merges don't conflict on whitespace
+* text=auto eol=lf
+*.jpg binary
+*.png binary

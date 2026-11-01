@@ -1,0 +1,30 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# runtime data: media, deals, frames, caches, raw model outputs
+data/
+eval/out/
+
+# videos never go in git (use the shared Drive folder)
+*.mp4
+*.mov
+*.m4v
+*.webm
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+build/
+dist/
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

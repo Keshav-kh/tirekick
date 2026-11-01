@@ -1,0 +1,16 @@
+{
+  "listing_id": "L-sample",
+  "source": "facebook_marketplace",
+  "title": "2003 Honda Accord EX - runs great",
+  "asking_price": 4800,
+  "currency": "USD",
+  "year": 2003,
+  "make": "Honda",
+  "model": "Accord",
+  "trim": "EX",
+  "engine": "3.0L V6",
+  "mileage": 128000,
+  "mileage_unit": "mi",
+  "vin": "1HGCM82633A004352",
+  "location": "State College, PA"
+}
