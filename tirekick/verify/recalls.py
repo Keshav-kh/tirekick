@@ -9,6 +9,7 @@ import httpx
 
 from tirekick.config import data_path
 from tirekick.models import Recall
+from tirekick.verify.http import get_json
 
 RECALLS_URL = "https://api.nhtsa.gov/recalls/recallsByVehicle"
 
@@ -35,12 +36,12 @@ def lookup_recalls(make: str, model: str, year: int, timeout: float = 10.0) -> l
     if cache.exists():
         payload = json.loads(cache.read_text(encoding="utf-8"))
     else:
-        resp = httpx.get(
-            RECALLS_URL,
-            params={"make": make, "model": model, "modelYear": year},
-            timeout=timeout,
-        )
-        resp.raise_for_status()
-        payload = resp.json()
+        try:
+            payload = get_json(RECALLS_URL, params={"make": make, "model": model, "modelYear": year},
+                               timeout=timeout)
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code in (400, 404):   # NHTSA answers 400 for unknown make/model
+                return []
+            raise
         cache.write_text(json.dumps(payload), encoding="utf-8")
     return parse_recalls(payload)
