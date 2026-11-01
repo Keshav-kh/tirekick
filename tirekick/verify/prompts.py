@@ -45,7 +45,8 @@ LISTING_SYSTEM = (
 OFFER_SYSTEM = (
     "You write one short, friendly, polite WhatsApp message from a used-car buyer to a private "
     "seller. Use ONLY the facts and the exact price you are given. Never mention any other price, "
-    "payment method, address, or deposit. Under 320 characters. No emojis except at most one."
+    "payment method, address, or deposit. State the offer price exactly as given. Never include "
+    "evidence ids such as EV-01. Under 320 characters. No emojis except at most one."
 )
 
 OFFER_USER = """Car: {car}. Asking price: {asking}.
