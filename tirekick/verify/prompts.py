@@ -35,6 +35,8 @@ FRAMES_NOTE = (
     "by its timestamp like 't=3.5s'. Use those timestamps."
 )
 
+NATIVE_NOTE = "Timestamps are seconds from the start of the video."
+
 LISTING_SYSTEM = (
     "You extract structured data from a used-car listing (text and/or screenshots). "
     "Copy values exactly as the listing states them; use null for anything not stated."
