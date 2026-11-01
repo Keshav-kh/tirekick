@@ -66,12 +66,32 @@ Send the video as a multimodal content part, in whatever form Meta's docs specif
 
 Set the mode with `MUSE_VIDEO_MODE=native|frames`.
 
-**API notes (fill in on day 1):**
-- Video input format:
-- Max video size and length:
-- Structured output supported? (yes/no)
-- Model ID used:
-- Latency per 60 s clip:
+**API notes (filled in Sun Nov 1, by B's agent; "verified" = read in Meta's own published code/docs, not a live call):**
+
+*Sources.* dev.meta.ai itself was not reachable from the cloud session (network policy), so these come from Meta's first-party GitHub repos [`meta-models/meta-model-cookbook`](https://github.com/meta-models/meta-model-cookbook) (`01_api_fundamentals` recipes 04, 07, 09, 10 and `07_sam`), [`meta-models/meta-sam`](https://github.com/meta-models/meta-sam) (`protocol/sam3.md`) and the Meta-published PyPI package `meta-sam-parser` 0.1.0. Items marked *(snippet)* come only from search-engine extracts of dev.meta.ai pages. **No live call has been made yet** (no `META_API_KEY` in the session): everything below still needs one smoke test with the real key.
+
+- **Model ID used:** `muse-spark-1.3` (verified: the cookbook's canonical config). `muse-spark-1.3-contributor` is the discounted tier where prompts and completions may be used to train Meta models, so **don't use it for sellers' videos**. Base URL `https://api.meta.ai/v1`, OpenAI Python SDK; Meta's docs name the key `MODEL_API_KEY` (format `LLM|<id>|<secret>`), and our code accepts `META_API_KEY` or `MODEL_API_KEY`.
+- **Structured output supported?** **Yes** (verified). Chat Completions: `response_format={"type": "json_schema", "json_schema": {"name", "schema"}}`, plus `additionalProperties: false` and `required`; `client.beta.chat.completions.parse(response_format=PydanticModel)` also works. Responses API: the parameter is `text.format`; sending `response_format` there returns 400. Recursive `$ref` schemas return 400 (our `strict_schema` inlines every `$ref`). `muse_json` still falls back to JSON-only plus Pydantic validation and one repair retry if the schema is rejected.
+- **Image input format:** (verified) a `{"type": "image_url", "image_url": {"url": ...}}` part with a public URL or a base64 data URL, in **user messages only** (system or developer messages with images return 400). Formats: jpeg, jpg, png, gif, webp, x-icon. About **50 images per request**, 50 MB per inline image, and 1 GiB via the Files API. Responses-API shape: `{"type": "input_image", "image_url": "<url or data URL>"}`. Frames mode therefore caps at **48 frames** (2 fps up to 24 s, lower fps for longer clips).
+- **Video input format:** **NOT verified for Muse Spark.**
+  - *(snippet)* dev.meta.ai/docs/video-understanding: the Responses API takes an `input_video` block with `video_url` (public URL or base64 data URL) or `file_id` (Files API).
+  - The `input_video` + `file_id` shape (upload with `purpose="user_data"`, MP4) **is** verified, but only for `sam-3.1` in the cookbook.
+  - Chat Completions `video_url` part: Meta's pages disagree *(snippet)*. video-understanding says it's supported; coding-agents says video is Responses-only. The chat schema lists an optional `video_url.fps`.
+  - Our `native` mode tries Responses `input_video` (data URL; Files API above ~35 MB), then Chat `video_url`, then falls back to frames automatically. A route that fails is skipped for the rest of the process.
+- **Max video size and length:** unknown for Muse Spark. *(snippet)* There's a 50 MB inline limit (file-handling page). The 15,000-frame (about 10 min) cap is SAM 3.1's, not Muse's. We downscale to 720p and cap at 60 s before a native upload when a clip is over 20 MB or 60 s.
+- **Web search:** (verified) **Responses API only**: `client.responses.create(model, input, tools=[{"type": "web_search", "search_context_size": "low|medium|high"}])`.
+  - `output` is a list of `reasoning`, `web_search_call` and `message` items.
+  - Citations come as `url_citation` annotations (`url`, `title`, `start_index`, `end_index`) on each `output_text` block.
+  - The model may choose not to search, so check for a `web_search_call` item (comps does, and returns n=0 if no search ran).
+  - Unknown: whether `text.format` can be combined with `web_search`. Comps asks for JSON in the prompt instead.
+- **SAM 3.1:** (verified) model `sam-3.1`, Responses API with `stream=True`.
+  - Input is a user message with `{"type": "input_text", "text": "<one noun phrase>"}` plus `{"type": "input_image", "image_url": "<data URL>"}`, or `{"type": "input_video", "file_id": ...}` for video.
+  - Output is one `output_text` lane, one line per frame: `<Nf>id<|box;x1=;y1=;x2=;y2=;w=;h=[;c=]|><|mask;x=0;y=0;data=H,W,<base85>|>,...`. `x2` and `y2` are inclusive; masks are base85, not base64.
+  - Pass `metadata={"include_confidence": "true"}` to get `c`.
+  - The live API finalizes the lane with `response.content_part.done` (not `response.output_text.done`). `highlight.py` reads both, plus the deltas.
+- **Errors, retries and limits:** (verified) errors use the OpenAI envelope. Retry 429, 5xx, timeouts and connection errors with backoff; never retry 400, 401 or 404. Rate-limit headers are `x-ratelimit-remaining-requests/-tokens`. Free tier: 2,400 requests/min and 800,000 tokens/min per team.
+- **`temperature`:** not shown anywhere in Meta's examples (unknown). Our client drops it automatically if a 400 mentions it.
+- **Latency per 60 s clip:** **pending** the first live run. `run_verification` logs per-step timings to `data/runs/*_pipeline.json`. A third party reports web search takes about 20–30 s and 15–35k input tokens per call (unverified); comps run in parallel with the video analysis.
 
 ## 3. `analyze_proof_take`: the prompt
 
@@ -122,24 +142,32 @@ Implement exactly the table in [SPEC §6.3](SPEC.md#63-checks-performed). Starti
 | Evidence | Severity | price_impact | Summary template (quoted to the seller, so keep it factual and polite) |
 |---|---|---|---|
 | `code_missing` | red | 0 | "The video doesn't show the requested code next to the VIN." |
+| `code_missing` (analysis failed: every model run errored) | red | 0 | "The proof video couldn't be analyzed; please send a new one." (the only video item in that case) |
 | `take_has_cuts` | red | 0 | "The video has cuts at {t}s; we need one continuous take." |
 | `screen_replay` | red | 0 | "The video appears to be filmed from a screen." |
-| `vin_unreadable` | yellow | 0 | "The windshield VIN wasn't readable." |
+| `vin_unreadable` (nothing read, or not 17 valid VIN characters) | yellow | 0 | "The windshield VIN wasn't readable." |
 | `vin_invalid` (NA VIN) | red | 0 | "The VIN read from the windshield fails the standard check digit." |
 | `vin_invalid` (non-NA) | yellow | 0 | "VIN check digit not applicable or failed (non-North-American VIN)." |
 | `vin_mismatch_doors` | red | 0 | "The windshield VIN and the door-jamb VIN don't match." |
+| `vin_listing_mismatch` (video VIN differs from the listing's VIN) | red | 0 | "The VIN in the video doesn't match the VIN in the listing." |
 | `vin_listing_mismatch` (year/make/model) | red | 0 | "The VIN decodes to a {decoded}, not the {listed} in the listing." |
-| `vin_listing_mismatch` (trim/engine) | yellow | 500 | "The VIN decodes to the {trim} trim, not the {listed_trim} listed." |
-| `recall_found` | yellow | 100 | "There's an NHTSA recall for this model: {component}." |
-| `warning_light_hidden` | red | 0 | "The {light} light didn't come on at key-on (bulb check)." |
-| `warning_light_on` (critical) | red | 0 | "The {light} light stays on after the engine starts." |
-| `warning_light_on` (other) | yellow | 150 | "The {light} light stays on after the start." |
-| `odometer_mismatch` (lower than listed) | red | 0 | "The odometer reads {read}, the listing says {listed}." |
-| `odometer_mismatch` (higher than listed) | yellow | 0.10 × extra miles, capped at 1500 | "The odometer reads {read}, higher than the {listed} listed." |
+| `vin_listing_mismatch` (trim) | yellow | 500 (`TRIM_MISMATCH_IMPACT`) | "The VIN decodes to the {trim} trim, not the {listed_trim} listed." |
+| `vin_listing_mismatch` (engine: displacement differs by more than 0.15 L, or cylinder count differs) | yellow | 500 (`ENGINE_MISMATCH_IMPACT`) | "The VIN decodes to a {engine} engine, not the {listed_engine} listed." |
+| `recall_found` | yellow | 100 each (`RECALL_IMPACT`), one item per top-level system, at most 3 items and 300 in total | "There's an NHTSA recall for this model: {component}." |
+| `warning_light_hidden` (check-engine, airbag, ABS; car 1996 or newer) | red | 0 | "The {light} light didn't come on at key-on (bulb check)." |
+| `warning_light_hidden` (other lights, or a pre-1996 car) | yellow | 0 | same |
+| `warning_light_hidden` (no light seen on at key-on at all) | yellow | 0 | "The key-on bulb check (all warning lights on) wasn't clearly shown." |
+| `warning_light_on` (critical: check-engine, airbag, oil, brake) | red | 0 | "The {light} light stays on after the engine starts." |
+| `warning_light_on` (other) | yellow | 150 (`LIGHT_ON_IMPACT`) | "The {light} light stays on after the engine starts." |
+| `odometer_mismatch` (lower than listed by more than 5%) | red | 0 | "The odometer reads {read}, the listing says {listed}." |
+| `odometer_mismatch` (higher than listed by more than 5%) | yellow | 0.10 × extra miles, capped at 1500 (`EXTRA_MILES_RATE`, `EXTRA_MILES_CAP`) | "The odometer reads {read}, higher than the {listed} listed." |
 | `engine_warm` | yellow | 0 | "The engine looked warm at start; a cold start wasn't shown." |
-| `scam_signal` | red | 0 | from `scan_chat` |
-| `price_below_market` | yellow | 0 | "The price is well below similar cars ({median} median)." |
-| `positive` | green | 0 | "All {n} warning lights came on at key-on and went off after the start." / "VIN matches the door and the listing." |
+| `scam_signal` (rules; model findings in a "hard" category) | red | 0 | from `scan_chat` |
+| `scam_signal` (model findings: pressure, off-platform, inconsistent story, other) | yellow | 0 | from `scan_chat` (quote checked verbatim in code) |
+| `price_below_market` (asking < 70% of the comps median) | yellow; **red** if the chat also has a red `scam_signal` | 0 | "The price is well below similar cars ({median} median)." |
+| `positive` | green | 0 | "All {n} warning lights came on at key-on and went off after the start." / "The windshield VIN matches the door-jamb sticker and the listing." / "Odometer {read} matches the listing." / "VIN decodes to a {car}, matching the listing." |
+
+The constants live at the top of `tirekick/verify/report_builder.py`; keep this table in sync with them.
 
 - **Evidence frames:** for each item with `clip_start_s`, run `ffmpeg -ss {t} -i video -frames:v 1 data/frames/{deal}/{EV-xx}.jpg`.
 - **Fair price range:** comps low–median, minus the sum of `price_impact`, clamped to ≥ 50% of asking.
