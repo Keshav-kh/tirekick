@@ -1,0 +1,14 @@
+{
+  "label": "scam",
+  "description": "Reservation fee via Cash App, before any video.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "I'd like to see it tomorrow"
+    },
+    {
+      "role": "seller",
+      "text": "Ok but lots of interest. Reserve it with a $200 reservation fee on Cash App."
+    }
+  ]
+}

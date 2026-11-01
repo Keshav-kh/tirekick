@@ -1,0 +1,18 @@
+{
+  "label": "legit",
+  "description": "Honest reason to sell; seller is local now.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Why are you selling?"
+    },
+    {
+      "role": "seller",
+      "text": "I'm moving out of state next month for a new job, so it has to go."
+    },
+    {
+      "role": "seller",
+      "text": "You can test drive it any evening this week."
+    }
+  ]
+}

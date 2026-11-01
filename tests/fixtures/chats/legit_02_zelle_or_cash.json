@@ -1,0 +1,14 @@
+{
+  "label": "legit",
+  "description": "Mentions Zelle with no other red flag.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "What payment do you take?"
+    },
+    {
+      "role": "seller",
+      "text": "I take Zelle or cash, whatever is easier for you. Happy to meet at your bank too."
+    }
+  ]
+}

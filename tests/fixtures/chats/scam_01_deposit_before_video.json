@@ -1,0 +1,22 @@
+{
+  "label": "scam",
+  "description": "Pressure plus a deposit before any video.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hi, is the Civic still available?"
+    },
+    {
+      "role": "seller",
+      "text": "Yes but I have 5 people asking. Send a $300 deposit and I'll hold it for you until Saturday."
+    },
+    {
+      "role": "buyer",
+      "text": "Can you send the video TireKick asked for first?"
+    },
+    {
+      "role": "seller",
+      "text": "Deposit first please, then video."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "label": "legit",
+  "description": "Venmo alone; discloses flaws.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Any issues with the car?"
+    },
+    {
+      "role": "seller",
+      "text": "AC needs a recharge and there's a dent on the rear bumper. Otherwise runs great."
+    },
+    {
+      "role": "seller",
+      "text": "Venmo or cash is fine. I'll do the video after lunch."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Out of country + shipping + Zelle.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hi! Where can I see the car?"
+    },
+    {
+      "role": "seller",
+      "text": "I'm currently out of the country for work, my brother will ship the car to you."
+    },
+    {
+      "role": "seller",
+      "text": "Just Zelle the full amount and shipping is free."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Overseas seller with a delivery agent.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hello, still available?"
+    },
+    {
+      "role": "seller",
+      "text": "Yes, I'm overseas but my delivery agent can bring it to you."
+    },
+    {
+      "role": "seller",
+      "text": "Agent needs a holding fee of $250 first."
+    }
+  ]
+}

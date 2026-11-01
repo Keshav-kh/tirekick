@@ -1,0 +1,14 @@
+{
+  "label": "scam",
+  "description": "Untraceable payment.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hello, interested in the Accord"
+    },
+    {
+      "role": "seller",
+      "text": "Great car. I only accept payment in Apple gift cards because of bank issues, sorry."
+    }
+  ]
+}
