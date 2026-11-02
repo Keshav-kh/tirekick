@@ -16,7 +16,7 @@ from pydantic import BaseModel
 
 from tirekick import orchestrator, store
 from tirekick.config import data_path, dev_mode, env
-from tirekick.report.render import render_report
+from tirekick.report.render import proof_video_path, render_report
 from tirekick.whatsapp.webhook import IncomingMessage, parse_incoming, verify_signature
 
 logging.basicConfig(level=logging.INFO)
@@ -67,6 +67,15 @@ def report_frame(deal_id: str, name: str):
     if not path.exists():
         raise HTTPException(status_code=404)
     return FileResponse(path)
+
+
+@app.get("/r/{deal_id}/video")
+def report_video(deal_id: str):
+    deal = store.get_deal(deal_id) if re.match(r"^DEAL-\d{4}$", deal_id) else None
+    path = proof_video_path(deal) if deal else None
+    if path is None:
+        raise HTTPException(status_code=404)
+    return FileResponse(path)  # supports Range, so the page can seek to each evidence clip
 
 
 # --------------------------------------------------------------------------- dev only
