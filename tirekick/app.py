@@ -41,8 +41,11 @@ def webhook_verify(request: Request):
 async def webhook_receive(request: Request, background: BackgroundTasks) -> dict:
     raw = await request.body()
     secret = env("WHATSAPP_APP_SECRET")
-    if secret and not verify_signature(raw, request.headers.get("X-Hub-Signature-256"), secret):
-        raise HTTPException(status_code=403, detail="bad signature")
+    if secret:
+        if not verify_signature(raw, request.headers.get("X-Hub-Signature-256"), secret):
+            raise HTTPException(status_code=403, detail="bad signature")
+    elif not dev_mode():  # without a secret, only dev mode may accept unsigned posts
+        raise HTTPException(status_code=403, detail="WHATSAPP_APP_SECRET not set")
     for msg in parse_incoming(json.loads(raw or b"{}")):
         background.add_task(orchestrator.handle_message, msg)  # reply 200 fast; work in background
     return {"ok": True}
@@ -80,11 +83,10 @@ class SimulatedMessage(BaseModel):
 
 
 @app.post("/dev/simulate")
-async def dev_simulate(request: Request) -> dict:
+def dev_simulate(body: dict) -> dict:  # sync: runs in the threadpool, so waiting on the orchestrator lock can't block the event loop
     """Fake an incoming WhatsApp message: {"from": "15551230001", "text": "...", "media_path": "x.mp4"}."""
     if not dev_mode():
         raise HTTPException(status_code=404)
-    body = await request.json()
     body["from_"] = body.pop("from", body.get("from_", ""))
     sim = SimulatedMessage.model_validate(body)
     media_type = sim.media_type or ("video/mp4" if (sim.media_path or "").lower().endswith((".mp4", ".mov"))

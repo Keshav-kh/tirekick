@@ -46,3 +46,8 @@ def test_dev_simulate_and_report_page():
     code = re.search(r"DEAL-\d{4}", str(r.json()["outbox"])).group(0)
     page = c.get(f"/r/{code}")
     assert page.status_code == 200 and "TIREKICK" in page.text
+
+
+def test_unsigned_webhook_rejected_outside_dev(monkeypatch):
+    monkeypatch.delenv("TIREKICK_DEV")
+    assert TestClient(app).post("/webhook", json=PAYLOAD).status_code == 403

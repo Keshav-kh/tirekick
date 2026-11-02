@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import logging
 import mimetypes
 
 import httpx
@@ -15,6 +16,7 @@ import httpx
 from tirekick.config import data_path, dev_mode, env
 from tirekick.models import utcnow
 
+log = logging.getLogger(__name__)
 _counter = itertools.count(1)
 
 
@@ -43,6 +45,8 @@ def _post(payload: dict) -> str:
         return _outbox(payload)
     url = f"{_base()}/{env('WHATSAPP_PHONE_NUMBER_ID')}/messages"
     resp = httpx.post(url, headers=_headers(), json={"messaging_product": "whatsapp", **payload}, timeout=20)
+    if resp.is_error:
+        log.error("WhatsApp send to %s failed %s: %s", payload.get("to"), resp.status_code, resp.text)
     resp.raise_for_status()
     return resp.json()["messages"][0]["id"]
 
