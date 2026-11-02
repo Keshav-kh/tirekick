@@ -38,20 +38,20 @@ def all_deals() -> list[Deal]:
     return sorted(deals, key=lambda d: d.updated_at, reverse=True)
 
 
-def _active(d: Deal) -> bool:
+def is_active(d: Deal) -> bool:
     return d.status not in TERMINAL and utcnow() - d.updated_at < EXPIRES_AFTER
 
 
 def find_deal_by_seller(wa_id: str) -> Deal | None:
-    return next((d for d in all_deals() if d.seller_wa_id == wa_id and _active(d)), None)
+    return next((d for d in all_deals() if d.seller_wa_id == wa_id and is_active(d)), None)
 
 
 def find_active_deal_by_buyer(wa_id: str) -> Deal | None:
-    return next((d for d in all_deals() if d.buyer_wa_id == wa_id and _active(d)), None)
+    return next((d for d in all_deals() if d.buyer_wa_id == wa_id and is_active(d)), None)
 
 
 def active_deals_for(wa_id: str) -> list[Deal]:
-    return [d for d in all_deals() if wa_id in (d.buyer_wa_id, d.seller_wa_id) and _active(d)]
+    return [d for d in all_deals() if wa_id in (d.buyer_wa_id, d.seller_wa_id) and is_active(d)]
 
 
 def new_deal_id() -> str:
