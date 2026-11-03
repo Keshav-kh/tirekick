@@ -59,18 +59,27 @@ Re-run after the fix: **TODO**.
 
 | Spoof type | Attempts | Caught (red) | Right reason |
 |---|---|---|---|
-| ai_generated | 2 | **TODO** | **TODO** |
-| old_video (no code / wrong code) | 3 | **TODO** | **TODO** |
-| different_car | 1 | **TODO** | **TODO** |
+| ai_generated | 2 | 2/2 (100%) | 2/2 (100%) |
+| old_video (no code / wrong code) | 3 | 3/3 (100%) | 3/3 (100%) |
+| different_car | 1 | 1/1 (100%) | 1/1 (100%) |
 | spliced, taped_light, warm_engine, screen_replay | 0 | not tested (no real car) | |
-| **All fakes** | 6 | **TODO** | |
+| **All fakes** | 6 | **6/6 (100%)** | 6/6 (100%) |
 | Honest controls (false alarms) | 0 | **untested**: no real honest clips | |
+
+"Right reason" = at least one of the evidence types we expected for that attack was in the report
+(`eval/out/redteam_scored.csv`).
+
+**How to read 6/6.** Every attempt was a fake, and every fake was flagged red. With no honest
+real-car clip in the set, we can't yet show that TireKick lets a genuine car through: a system that
+flagged everything would also score 6/6. Measuring the false-alarm rate on real, honest proof takes is
+the first thing we'd do with access to a car.
 
 Observed while debugging: on the AI "honest" take, Muse Spark read the code K7Q2XM correctly and
 reported that the windshield VIN and door VIN don't match (the AI invents both), which is a correct red flag.
+The hidden-light clip (R02) was flagged red, but the light check itself did not catch the dark
+check-engine light (see section 2), so that catch came from the other checks.
 
-Misses, explained:
-- **TODO** (one line per miss)
+Misses: none among the 6 fakes. The light-check gap in section 2 is the main known weakness.
 
 ## 4. Negotiation study (simulated sellers)
 
