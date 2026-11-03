@@ -1,6 +1,6 @@
 # Results (misses included)
 
-_Last updated: Nov 3 2026, Afif (C). Numbers marked **TODO** are filled in from the eval scripts' output._
+_Last updated: Nov 3 2026, Afif (C)._
 
 **Read this first.** We had no access to a real car during the hackathon. Every video test below uses
 **AI-generated clips** (Higgsfield, Seedance 2.5) of a 2014 Honda Civic, stitched from 5-second pieces
@@ -29,8 +29,17 @@ listings under $15k, sampled with seed 42 by `eval/import_usa_cars.py`. We did n
   necessarily this exact car.
 
 **Plus 3 current private-seller listings** (Craigslist Brooklyn, cars by owner, opened and screenshotted
-by hand, `eval/data/demo_listings.csv`): all 3 VINs valid; none of the 3 descriptions mention recalls.
-One lists the body type as "sedan" while the door sticker says MPV. Recalls per car: **TODO**.
+by hand, `eval/data/demo_listings.csv`). All 3 VINs are valid and decode to the year/make/model listed,
+and none of the 3 descriptions mention a recall:
+
+| Listing | Asking | Seller says | NHTSA recalls for that year/make/model |
+|---|---|---|---|
+| 2020 Nissan Sentra S | $7,900 | "Runs and drives great" | 4 (incl. steering tie rods, headlights) |
+| 2004 Honda Element LX | $2,700 | "Runs and drives excellent, clean title" | **11** (incl. driver and passenger airbag inflators) |
+| 2005 Scion tC | $1,700 | "Runs and drives great, clean title" | 4 (incl. airbags, side airbags) |
+
+Small mismatches a buyer could miss: the Element is listed as a "sedan" while its door sticker says MPV,
+and the Scion is listed as a "Toyota". Recalls are model-level, not proof this exact car is unrepaired.
 
 ## 2. Light check (bulb check at key-on)
 
@@ -51,7 +60,7 @@ hard-to-see dashboard currently passes.**
 
 Fix (proposed to B): if any must-light (check-engine, airbag, ABS) is `None`, add a yellow
 "couldn't confirm this light came on, please refilm the dashboard up close" and drop the green line.
-Re-run after the fix: **TODO**.
+Status: fix proposed to B, not yet applied at the time of writing.
 
 ## 3. Red team ("try to fool TireKick")
 
@@ -119,3 +128,6 @@ Caveats:
    instead of erroring, so a misconfigured server would pass every car.
 3. **Negotiation parser:** `apply_seller_reply` treats "okay I can't go that low" as agreement (it sees
    "okay" and no price). Test: `tests/test_sim_negotiation.py::test_refusal_with_okay_is_not_agreement`. Not triggered in the 30 simulated TireKick negotiations.
+4. **Scion recall lookup crashes:** NHTSA's VIN decoder returns make "Toyota", model "Scion tC", but
+   the recalls API only accepts make "Scion", model "tC", so `lookup_recalls` gets HTTP 400 for every
+   Scion. Fix: map Toyota "Scion X" to make "Scion", model "X" in `recalls.py` (found on the demo listing).
