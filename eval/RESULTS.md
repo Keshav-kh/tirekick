@@ -1,43 +1,97 @@
-# Results (fill in from the eval scripts; misses included)
+# Results (misses included)
 
-_Last updated: (date, who)_
+_Last updated: Nov 3 2026, Afif (C). Numbers marked **TODO** are filled in from the eval scripts' output._
 
-## 100-listing VIN study
+**Read this first.** We had no access to a real car during the hackathon. Every video test below uses
+**AI-generated clips** (Higgsfield, Seedance 2.5) of a 2014 Honda Civic, stitched from 5-second pieces
+with `eval/stitch_clips.py`. These results show how TireKick handles synthetic proof videos.
+Real-dashboard accuracy and the false-alarm rate on honest sellers are **untested**, and testing them
+is our first next step. The negotiation study uses **AI-played sellers**, not people.
+
+## 1. Listing study (200 listings)
+
+Source: the public Kaggle "US Cars" dataset (AuctionExport auction listings, ~2020), 200 clean-title US
+listings under $15k, sampled with seed 42 by `eval/import_usa_cars.py`. We did not scrape any site.
+
 | Metric | Value |
 |---|---|
-| Listings collected | |
-| Invalid check digit (North-American VINs) | |
-| Year/make/model mismatch vs VIN | |
-| Trim mismatch vs VIN | |
-| Model has ≥ 1 NHTSA recall | |
-| …and the listing never mentions it | |
+| Listings | 200 (174 North-American VINs) |
+| Invalid VIN check digit | 0/174 (0%) |
+| Year wrong vs VIN | 0/200 (0%) |
+| Make wrong vs VIN | 1/200 (0.5%) |
+| Model has ≥ 1 NHTSA recall | **192/200 (96%)** |
 
-Note: recalls are model-level, not VIN-level.
+- The dataset's model field is often truncated (e.g. "door", "se"), so model mismatches (58%) reflect
+  the dataset's data quality, not seller dishonesty. We don't report them as a finding.
+- The dataset has no trim or description text, so trim mismatch and "the listing mentions the recall"
+  can't be measured.
+- Recalls are model-level (year/make/model), not VIN-level: the car's model has been recalled, not
+  necessarily this exact car.
 
-## Red team
-| Spoof type | Attempts | Caught | Right reason |
+**Plus 3 current private-seller listings** (Craigslist Brooklyn, cars by owner, opened and screenshotted
+by hand, `eval/data/demo_listings.csv`): all 3 VINs valid; none of the 3 descriptions mention recalls.
+One lists the body type as "sedan" while the door sticker says MPV. Recalls per car: **TODO**.
+
+## 2. Light check (bulb check at key-on)
+
+`python eval/light_check_eval.py eval/data/light_check.csv --runs 3`, 6 AI clips (4 full takes,
+2 cropped to a dashboard close-up), 3 Muse Spark runs each, merged by majority vote.
+
+| Metric | Value |
+|---|---|
+| Hidden-light catch rate | **0/3 (0%)** |
+| False alarms on all-lights-on clips | 0/3 (0%) |
+| Mean run agreement | 0.75 |
+
+**Why every hidden light was missed:** Muse Spark did not say the check-engine light was *on*; it said
+it **couldn't tell** (`lit_at_key_on = None`), even on the close-up, where it clearly reported the
+battery, oil and ABS lights as lit. The report code only flags a light reported as *off*, and when some
+lights are seen and none are off it adds a green "all N warning lights came on" line. So **a
+hard-to-see dashboard currently passes.**
+
+Fix (proposed to B): if any must-light (check-engine, airbag, ABS) is `None`, add a yellow
+"couldn't confirm this light came on, please refilm the dashboard up close" and drop the green line.
+Re-run after the fix: **TODO**.
+
+## 3. Red team ("try to fool TireKick")
+
+`python eval/redteam_eval.py eval/data/redteam.csv`. Six attempts on the AI-generated clips.
+
+| Spoof type | Attempts | Caught (red) | Right reason |
 |---|---|---|---|
-| different_car | | | |
-| old_video | | | |
-| spliced | | | |
-| taped_light | | | |
-| warm_engine | | | |
-| screen_replay | | | |
-| **All fakes** | | | |
-| Honest controls (false alarms) | | | |
+| ai_generated | 2 | **TODO** | **TODO** |
+| old_video (no code / wrong code) | 3 | **TODO** | **TODO** |
+| different_car | 1 | **TODO** | **TODO** |
+| spliced, taped_light, warm_engine, screen_replay | 0 | not tested (no real car) | |
+| **All fakes** | 6 | **TODO** | |
+| Honest controls (false alarms) | 0 | **untested**: no real honest clips | |
+
+Observed while debugging: on the AI "honest" take, Muse Spark read the code K7Q2XM correctly and
+reported that the windshield VIN and door VIN don't match (the AI invents both), which is a correct red flag.
 
 Misses, explained:
--
+- **TODO** (one line per miss)
 
-## Light check
-| Metric | Value |
-|---|---|
-| Hidden-light catch rate | |
-| False alarms on honest clips | |
-| Mean run agreement | |
+## 4. Negotiation study (simulated sellers)
 
-## Negotiation study
+`python eval/sim_negotiation.py --repeats 3`: 10 seller personalities × 2 conditions × 3 repeats = 60
+negotiations. Sellers are played by Muse Spark with a secret lowest price **enforced in code**.
+"Student alone" is an AI buyer that only sees the listing; "TireKick" is B's real negotiation agent with
+the verification report. Same budget and round limit for both.
+
 | Condition | n | Surplus captured (mean / median) | Avg discount | Walk-aways |
 |---|---|---|---|---|
-| Student alone | | | | |
-| TireKick | | | | |
+| Student alone (AI buyer, listing only) | **TODO** | **TODO** | **TODO** | **TODO** |
+| TireKick | **TODO** | **TODO** | **TODO** | **TODO** |
+
+Surplus captured = (asking − final) / (asking − seller's secret lowest price). Walk-aways are counted
+separately. Seller floor blocks: **TODO**. TireKick parser false agreements: **TODO**.
+
+## 5. Bugs found by the evaluation (reported to B)
+
+1. **Blurry dashboard passes:** "can't tell" on a must-light is treated as fine, and a green "all lights
+   came on" line is added (`report_builder.py`). See §2.
+2. **Silent failure without ffmpeg:** `analyze_proof_take` returns an empty "saw nothing" analysis
+   instead of erroring, so a misconfigured server would pass every car.
+3. **Negotiation parser:** `apply_seller_reply` treats "okay I can't go that low" as agreement (it sees
+   "okay" and no price). Test: `tests/test_sim_negotiation.py::test_refusal_with_okay_is_not_agreement`.
