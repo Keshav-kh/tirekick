@@ -1,1 +1,7 @@
 clip,year,make,model,code,masked_light,owner_consent,notes
+eval/data/clips/aigen_honest_01.mp4,2014,Honda,Civic,K7Q2XM,none,n/a (AI-generated),AI clip (Higgsfield) - all lights on at key-on
+eval/data/clips/aigen_hidden_01.mp4,2014,Honda,Civic,K7Q2XM,check_engine,n/a (AI-generated),AI clip (Higgsfield) - check-engine and several other lights dark
+eval/data/clips/aigen_nocode_01.mp4,2014,Honda,Civic,K7Q2XM,none,n/a (AI-generated),AI clip (Higgsfield) - all lights on - no code
+eval/data/clips/aigen_nocode_02.mp4,2014,Honda,Civic,K7Q2XM,check_engine,n/a (AI-generated),AI clip (Higgsfield) - check-engine and several other lights dark - no code
+eval/data/clips/dash_honest_close.mp4,2014,Honda,Civic,K7Q2XM,none,n/a (AI-generated),AI clip cropped to the dashboard close-up - all lights on
+eval/data/clips/dash_hidden_close.mp4,2014,Honda,Civic,K7Q2XM,check_engine,n/a (AI-generated),AI clip cropped to the dashboard close-up - check-engine and several other lights dark
