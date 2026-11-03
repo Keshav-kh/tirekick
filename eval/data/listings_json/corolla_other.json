@@ -1,0 +1,16 @@
+{
+  "listing_id": "RT-corolla-other",
+  "source": "other",
+  "title": "2012 Toyota Corolla LE (red-team listing: the clip shows a different car)",
+  "asking_price": 7800,
+  "currency": "USD",
+  "year": 2012,
+  "make": "Toyota",
+  "model": "Corolla",
+  "trim": "LE",
+  "mileage": 121000,
+  "mileage_unit": "mi",
+  "vin": null,
+  "location": "State College, PA",
+  "description": "Synthetic listing for the different_car attack: the proof clip shows a Honda Civic."
+}
