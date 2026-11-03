@@ -88,13 +88,28 @@ negotiations. Sellers are played by Muse Spark with a secret lowest price **enfo
 "Student alone" is an AI buyer that only sees the listing; "TireKick" is B's real negotiation agent with
 the verification report. Same budget and round limit for both.
 
-| Condition | n | Surplus captured (mean / median) | Avg discount | Walk-aways |
+| Condition | n | Surplus captured (mean / median) | Avg discount off asking | No deal |
 |---|---|---|---|---|
-| Student alone (AI buyer, listing only) | **TODO** | **TODO** | **TODO** | **TODO** |
-| TireKick | **TODO** | **TODO** | **TODO** | **TODO** |
+| Student alone (AI buyer, listing only) | 30 | 0.51 / 0.50 | 7.3% | 15 of 30 |
+| **TireKick** | 30 | **0.84 / 0.84** | **12.6%** | **0 of 30** |
 
-Surplus captured = (asking − final) / (asking − seller's secret lowest price). Walk-aways are counted
-separately. Seller floor blocks: **TODO**. TireKick parser false agreements: **TODO**.
+Surplus captured = (asking − final) / (asking − seller's secret lowest price): 0 means the buyer paid
+the asking price, 1 means they got the seller down to their secret floor.
+
+**Headline:** against AI-played sellers, TireKick captured 84% of the available discount vs 51% for a
+student negotiating alone with only the listing, and reached a deal in 30/30 negotiations vs 15/30.
+
+Caveats:
+- "No deal" includes running out of rounds (6 seller replies) as well as a real walk-away.
+- Surplus and discount are averaged over **completed deals only**, so the student's figures cover just
+  their 15 successful negotiations; averaging in the failures would make the gap larger, not smaller.
+- The sellers are played by an LLM (Muse Spark), and the student buyer is too. Real people may
+  negotiate differently; a study with real sellers is a next step.
+- TireKick's edge here comes from the verification report (open recalls, higher real mileage, warning
+  lights, price comps), which the student buyer never sees. That is the product's design, not a bias
+  in the test.
+- TireKick parser false agreements: **0** in 30 negotiations (the parser bug in section 5 exists but
+  was not triggered by these sellers).
 
 ## 5. Bugs found by the evaluation (reported to B)
 
@@ -103,4 +118,4 @@ separately. Seller floor blocks: **TODO**. TireKick parser false agreements: **T
 2. **Silent failure without ffmpeg:** `analyze_proof_take` returns an empty "saw nothing" analysis
    instead of erroring, so a misconfigured server would pass every car.
 3. **Negotiation parser:** `apply_seller_reply` treats "okay I can't go that low" as agreement (it sees
-   "okay" and no price). Test: `tests/test_sim_negotiation.py::test_refusal_with_okay_is_not_agreement`.
+   "okay" and no price). Test: `tests/test_sim_negotiation.py::test_refusal_with_okay_is_not_agreement`. Not triggered in the 30 simulated TireKick negotiations.
