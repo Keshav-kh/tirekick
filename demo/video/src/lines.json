@@ -1,0 +1,107 @@
+{
+ "A01": {
+  "who": "jay",
+  "text": "Maya, look! A 2003 Accord... forty-eight hundred bucks. The seller says it runs great.",
+  "sec": 6.391
+ },
+ "A02": {
+  "who": "maya",
+  "text": "Oh, nice! Have you seen it in person?",
+  "sec": 2.114
+ },
+ "A03": {
+  "who": "jay",
+  "text": "Not yet. He's out of state, so he wants a five hundred dollar deposit to hold it.",
+  "sec": 5.149
+ },
+ "A04": {
+  "who": "jay",
+  "text": "He's in the navy. On a submarine. But apparently, the Wi-Fi down there is amazing.",
+  "sec": 5.464
+ },
+ "A05": {
+  "who": "maya",
+  "text": "Jay.",
+  "sec": 0.613
+ },
+ "B01": {
+  "who": "maya",
+  "text": "That is exactly how my cousin lost his money.",
+  "sec": 2.831
+ },
+ "C01": {
+  "who": "maya",
+  "text": "And even when the car is real, one strip of tape can hide a check-engine light.",
+  "sec": 4.348
+ },
+ "C02": {
+  "who": "maya",
+  "text": "Send it through TireKick first.",
+  "sec": 1.81
+ },
+ "D01": {
+  "who": "narr",
+  "text": "TireKick. The car proves itself, before anyone haggles.",
+  "sec": 2.94
+ },
+ "E01": {
+  "who": "narr",
+  "text": "The seller gets a one-time code, and films one continuous take. The code, next to the VIN. Every warning light at key-on. Then, the engine start.",
+  "sec": 8.789
+ },
+ "F01": {
+  "who": "narr",
+  "text": "Meta's Muse Spark watches the video, and reports what it sees. Our code makes the call. The model never decides the verdict.",
+  "sec": 7.296
+ },
+ "G01": {
+  "who": "narr",
+  "text": "This seller's video had no code, a VIN that fails the check digit, and a deposit request.",
+  "sec": 5.539
+ },
+ "H01": {
+  "who": "jay",
+  "text": "Wow. Glad I didn't send that five hundred.",
+  "sec": 2.566
+ },
+ "H02": {
+  "who": "maya",
+  "text": "You almost sent five hundred bucks to a submarine.",
+  "sec": 2.613
+ },
+ "H03": {
+  "who": "jay",
+  "text": "The Wi-Fi was amazing, though.",
+  "sec": 1.87
+ },
+ "I01": {
+  "who": "narr",
+  "text": "An honest seller passes, with one flag: an airbag recall on this model. TireKick turns that into leverage.",
+  "sec": 6.507
+ },
+ "J01": {
+  "who": "narr",
+  "text": "Every price comes from code. Never above your max. Every ask cites real evidence, and you approve each message.",
+  "sec": 6.379
+ },
+ "K01": {
+  "who": "jay",
+  "text": "Forty-four hundred! That's four hundred under asking.",
+  "sec": 3.408
+ },
+ "P01": {
+  "who": "narr",
+  "text": "Find the car on Facebook Marketplace. TireKick checks it, right inside WhatsApp.",
+  "sec": 4.675
+ },
+ "S01": {
+  "who": "narr",
+  "text": "In our tests, TireKick caught all six spoof attempts. And it got eighty-four percent of the possible discount. A student on their own got fifty-one.",
+  "sec": 8.213
+ },
+ "Z01": {
+  "who": "narr",
+  "text": "Meta's Muse finds the car, and haggles. TireKick makes the car prove itself.",
+  "sec": 4.43
+ }
+}
