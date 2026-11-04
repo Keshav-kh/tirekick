@@ -56,10 +56,21 @@ def run_verification(deal: Deal, video_path: str) -> VerificationReport:
             log.warning("comps failed: %s", e)
             return None
 
-    with ThreadPoolExecutor(max_workers=2) as pool:
+    def chat_after_comps(comps_future):
+        # The scam pass (a model call, ~10-25 s) needs only the chat, the listing and the comps,
+        # so it runs alongside the video analysis instead of after it.
+        return timed("scan_chat", scan_chat, deal.chat, listing, comps_future.result())
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
         comps_future = pool.submit(timed, "comps", safe_comps)
+        chat_future = pool.submit(chat_after_comps, comps_future)
         analysis = timed("analysis", verify.analyze_proof_take, video_path, challenge, listing, runs_setting())
         comps = comps_future.result()
+        try:
+            chat_evidence = chat_future.result()
+        except Exception as e:  # noqa: BLE001 - rules can't fail, but never lose the report over it
+            log.warning("scan_chat failed: %s", e)
+            chat_evidence = []
 
     read = normalize_vin(analysis.windshield_vin_read or "")
     vin = read if _VIN_RE.match(read) else (listing.vin or None)
@@ -80,7 +91,6 @@ def run_verification(deal: Deal, video_path: str) -> VerificationReport:
         except Exception as e:  # noqa: BLE001
             log.warning("recalls lookup failed: %s", e)
 
-    chat_evidence = timed("scan_chat", scan_chat, deal.chat, listing, comps)
     report = build_report(deal.deal_id, listing, challenge, analysis, vin_decode, recalls, comps, chat_evidence)
     timed("frames", extract_evidence_frames, report, video_path)
     if not fake_ai():
