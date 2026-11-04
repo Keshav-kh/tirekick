@@ -51,7 +51,7 @@ labelled that way.
 | 200 listings (public US Cars dataset, auction listings ~2020) | Every VIN valid; year matched 200/200, make 199/200. **96% are a model with at least one NHTSA recall.** |
 | 3 current Craigslist private-seller listings | None mention a recall. The 2004 Honda Element ("runs and drives excellent, clean title") is a model with **11 recalls, including both front airbag inflators**. |
 | Red team: 6 spoof attempts (AI-generated take, old video / wrong code, different car) | **6/6 caught** for the expected reason. False-alarm rate on real honest takes is untested. |
-| Light check: does a dark check-engine light get flagged? | **0/3 caught.** Muse Spark reported the light as "can't tell" while clearly seeing others, and our report code treated "can't tell" as a pass. Fix identified (see limits). |
+| Light check: does a dark check-engine light get flagged? | **0/3 caught.** Muse Spark reported the light as "can't tell" while clearly seeing others, and our report code treated "can't tell" as a pass. Fixed since; not yet re-measured (see limits). |
 | Negotiation (60 simulated negotiations) | TireKick captured **84%** of the available discount vs **51%** for a student negotiating alone, and closed **30/30** deals vs **15/30**. |
 
 Live run with real Muse Spark (web demo): an AI-generated proof video was rejected 🔴 for five independent
@@ -62,20 +62,20 @@ listing mismatch, and an odometer reading of 98,412 mi against a listed 200,000.
 
 - Not a mechanical inspection. TireKick always recommends a pre-purchase inspection.
 - Recalls are model-level (year/make/model), not proof that this exact car is unrepaired.
-- **Hidden-light check:** a blurry or distant dashboard currently passes, because "couldn't tell" isn't
-  flagged. Fix: treat an unconfirmed check-engine, airbag or ABS light as yellow ("refilm the dashboard
-  closer").
+- **Hidden-light check:** at evaluation time a blurry or distant dashboard passed, because "couldn't tell"
+  wasn't flagged. Fixed: an unconfirmed check-engine, airbag or ABS light is now yellow ("refilm the
+  dashboard up close"). The 0/3 above was measured before the fix and hasn't been re-run.
 - Tested on AI-generated clips and AI-played sellers, not real cars or real people. The false-alarm rate on
   honest sellers is our first next test.
 - Our WhatsApp business account is restricted until Meta business verification, so the recorded demo runs
   the same bot through a web chat (buyer and seller side by side) instead of WhatsApp.
-- Bugs our own evaluation found (and reported): the hidden-light gap above; a reply parser that read
-  "okay, I can't go that low" as agreement (never triggered in 30 runs); a silent "saw nothing" result when
-  ffmpeg is missing; recall lookups failing for Scion VINs.
+- Bugs our own evaluation found, all fixed with regression tests: the hidden-light gap above; a reply parser
+  that read "okay, I can't go that low" as agreement (never triggered in 30 runs); a silent "saw nothing"
+  result when ffmpeg is missing (now a red "couldn't be analyzed"); recall lookups failing for Scion VINs.
 
 ## What's next
 
-- Fix the hidden-light gap, then measure false alarms on real honest proof takes.
+- Re-run the light check with the fix, then measure false alarms on real honest proof takes.
 - TireKick as a tool Meta's Muse agent can call (Muse Connector), so Muse checks the car before it haggles.
 - dubizzle and Arabic support for the UAE market.
 

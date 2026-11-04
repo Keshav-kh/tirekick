@@ -15,7 +15,7 @@ Full method, data and caveats in [eval/RESULTS.md](eval/RESULTS.md). The video t
 | Red team: 6 spoof attempts (AI-generated take, old video / wrong code, different car) | **6/6 caught** for the expected reason (false-alarm rate on real honest takes untested) |
 | Negotiation: 60 simulated negotiations | TireKick **84%** of the available discount vs **51%** for a student alone; **30/30** deals vs **15/30** |
 | 200 public listings (US Cars dataset) | **96%** are a model with at least one NHTSA recall |
-| Light check: dark check-engine light | **0/3 caught**: "can't tell" was treated as a pass; fix identified |
+| Light check: dark check-engine light | **0/3 caught** at evaluation time: "can't tell" was treated as a pass. Fixed since (an unconfirmed light is now flagged yellow, "refilm the dashboard"); not yet re-measured |
 
 Demo video: (link)
 
@@ -25,7 +25,8 @@ Buyer and seller side by side in the browser, running the same bot code as the W
 
 ```bash
 TIREKICK_DEV=1 uvicorn webchat_server:app --app-dir demo --port 8000
-# open http://localhost:8000/demo
+# open http://localhost:8000/demo            (WhatsApp-style chat)
+# open http://localhost:8000/demo/facebook   (Marketplace + Messenger-style chat)
 # add TIREKICK_FAKE_AI=1 to run without API keys (sample data)
 ```
 
