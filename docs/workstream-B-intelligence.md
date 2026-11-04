@@ -68,6 +68,14 @@ Set the mode with `MUSE_VIDEO_MODE=native|frames`.
 
 **API notes (filled in Sun Nov 1, by B's agent; "verified" = read in Meta's own published code/docs, not a live call):**
 
+*Live-verified Wed Nov 4 with the team key (synthetic clip, 1 run each):*
+- **Chat Completions + `response_format` json_schema works** on `muse-spark-1.3`, and so does `temperature`. A key in the form `LLM_<id>_<secret>` works as is.
+- **Native video works: Responses API `input_video` with a base64 `data:video/mp4` URL**, plus `text.format` json_schema. The first route was accepted with no fallback. A 10 s clip took **23 s** in native mode vs **35 s** in frames mode (frames: 20 images). Both found the hard cut at exactly 6.0 s.
+- The model refuses to read a code or VIN from on-screen graphics ("no physical paper / VIN plate visible"). That's conservative and good for anti-spoofing, but it means the synthetic clip can't test OCR; use a real paper card.
+- **Web search comps:** 4 real cited listings for a 2003 Accord EX (price range $4,395–$6,919) in **74 s**. The results are cached, and A's flow requests comps when the listing arrives. The JSON answer carried no `url_citation` annotations, so the "any URL-bearing comp" rule applied.
+- `parse_listing` 17 s; `scan_chat` model pass 10 s (it found pressure and a Telegram move, both quoted verbatim); offer draft 15 s (it passed `check_offer`).
+- **SAM 3.1**: 1.8 s; the stream emits both `response.output_text.done` and `content_part.done`. A phrase with no match returns an empty lane, which is valid.
+
 *Sources.* dev.meta.ai itself was not reachable from the cloud session (network policy), so these come from Meta's first-party GitHub repos [`meta-models/meta-model-cookbook`](https://github.com/meta-models/meta-model-cookbook) (`01_api_fundamentals` recipes 04, 07, 09, 10 and `07_sam`), [`meta-models/meta-sam`](https://github.com/meta-models/meta-sam) (`protocol/sam3.md`) and the Meta-published PyPI package `meta-sam-parser` 0.1.0. Items marked *(snippet)* come only from search-engine extracts of dev.meta.ai pages. **No live call has been made yet** (no `META_API_KEY` in the session): everything below still needs one smoke test with the real key.
 
 - **Model ID used:** `muse-spark-1.3` (verified: the cookbook's canonical config). `muse-spark-1.3-contributor` is the discounted tier where prompts and completions may be used to train Meta models, so **don't use it for sellers' videos**. Base URL `https://api.meta.ai/v1`, OpenAI Python SDK; Meta's docs name the key `MODEL_API_KEY` (format `LLM|<id>|<secret>`), and our code accepts `META_API_KEY` or `MODEL_API_KEY`.
@@ -157,6 +165,7 @@ Implement exactly the table in [SPEC §6.3](SPEC.md#63-checks-performed). Starti
 | `warning_light_hidden` (check-engine, airbag, ABS; car 1996 or newer) | red | 0 | "The {light} light didn't come on at key-on (bulb check)." |
 | `warning_light_hidden` (other lights, or a pre-1996 car) | yellow | 0 | same |
 | `warning_light_hidden` (no light seen on at key-on at all) | yellow | 0 | "The key-on bulb check (all warning lights on) wasn't clearly shown." |
+| `warning_light_hidden` (a must-light the model can't confirm: "can't tell" or not reported, while others are lit) | yellow | 0 | "We couldn't confirm the {light} light came on at key-on." (also suppresses the green all-lights line) |
 | `warning_light_on` (critical: check-engine, airbag, oil, brake) | red | 0 | "The {light} light stays on after the engine starts." |
 | `warning_light_on` (other) | yellow | 150 (`LIGHT_ON_IMPACT`) | "The {light} light stays on after the engine starts." |
 | `odometer_mismatch` (lower than listed by more than 5%) | red | 0 | "The odometer reads {read}, the listing says {listed}." |
