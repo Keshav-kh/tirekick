@@ -19,18 +19,6 @@ Full method, data and caveats in [eval/RESULTS.md](eval/RESULTS.md). The video t
 
 Demo video: (link)
 
-## Run the web demo (no WhatsApp needed)
-
-Buyer and seller side by side in the browser, running the same bot code as the WhatsApp version:
-
-```bash
-TIREKICK_DEV=1 uvicorn webchat_server:app --app-dir demo --port 8000
-# open http://localhost:8000/demo
-# add TIREKICK_FAKE_AI=1 to run without API keys (sample data)
-```
-
----
-
 ## Read these first
 
 | Doc | What it's for | Who reads it |
@@ -90,5 +78,5 @@ python scripts/verify_clip.py --video samples/coldstart.mp4 --code K7Q2XM --list
 
 - [x] All three workstreams merged; tests pass
 - [x] Evaluation complete ([eval/RESULTS.md](eval/RESULTS.md))
-- [x] Web demo (`demo/webchat_server.py`); WhatsApp delivery pending Meta business verification
+- [x] Demo video; WhatsApp delivery pending Meta business verification
 - [ ] Submitted (Wed Nov 4, 2026)

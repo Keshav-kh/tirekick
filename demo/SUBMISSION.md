@@ -54,7 +54,7 @@ labelled that way.
 | Light check: does a dark check-engine light get flagged? | **0/3 caught.** Muse Spark reported the light as "can't tell" while clearly seeing others, and our report code treated "can't tell" as a pass. Fix identified (see limits). |
 | Negotiation (60 simulated negotiations) | TireKick captured **84%** of the available discount vs **51%** for a student negotiating alone, and closed **30/30** deals vs **15/30**. |
 
-Live run with real Muse Spark (web demo): an AI-generated proof video was rejected 🔴 for five independent
+Live run with real Muse Spark: an AI-generated proof video was rejected 🔴 for five independent
 reasons: cuts at 5/10/15 s, an invalid windshield VIN, windshield vs door VIN mismatch, video VIN vs
 listing mismatch, and an odometer reading of 98,412 mi against a listed 200,000.
 
@@ -67,8 +67,8 @@ listing mismatch, and an odometer reading of 98,412 mi against a listed 200,000.
   closer").
 - Tested on AI-generated clips and AI-played sellers, not real cars or real people. The false-alarm rate on
   honest sellers is our first next test.
-- Our WhatsApp business account is restricted until Meta business verification, so the recorded demo runs
-  the same bot through a web chat (buyer and seller side by side) instead of WhatsApp.
+- Our WhatsApp business account is restricted until Meta business verification, so the demo shows the
+  same bot through a simulated chat view instead of live WhatsApp.
 - Bugs our own evaluation found (and reported): the hidden-light gap above; a reply parser that read
   "okay, I can't go that low" as agreement (never triggered in 30 runs); a silent "saw nothing" result when
   ffmpeg is missing; recall lookups failing for Scion VINs.
