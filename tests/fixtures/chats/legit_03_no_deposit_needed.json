@@ -1,0 +1,14 @@
+{
+  "label": "legit",
+  "description": "Negated deposit.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Do you need a deposit to hold it?"
+    },
+    {
+      "role": "seller",
+      "text": "No deposit needed, first come first served. Video coming in a bit."
+    }
+  ]
+}

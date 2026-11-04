@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Western Union, no inspection.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Can my mechanic look at it?"
+    },
+    {
+      "role": "seller",
+      "text": "No inspection needed, it was just serviced."
+    },
+    {
+      "role": "seller",
+      "text": "Payment by Western Union only."
+    }
+  ]
+}

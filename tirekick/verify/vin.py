@@ -5,10 +5,9 @@ from __future__ import annotations
 import json
 import re
 
-import httpx
-
 from tirekick.config import data_path
 from tirekick.models import VinDecode
+from tirekick.verify.http import get_json
 
 _TRANSLIT = {
     **{str(d): d for d in range(10)},
@@ -87,9 +86,8 @@ def decode_vin(vin: str, timeout: float = 10.0) -> VinDecode:
     if cache.exists():
         row = json.loads(cache.read_text(encoding="utf-8"))
     else:
-        resp = httpx.get(VPIC_URL.format(vin=norm), timeout=timeout)
-        resp.raise_for_status()
-        results = resp.json().get("Results") or [{}]
+        results = get_json(VPIC_URL.format(vin=norm), timeout=timeout).get("Results") or [{}]
         row = results[0]
-        cache.write_text(json.dumps(row), encoding="utf-8")
+        if row.get("Make") or row.get("ModelYear"):   # don't cache an empty decode
+            cache.write_text(json.dumps(row), encoding="utf-8")
     return parse_vpic_row(norm, row)

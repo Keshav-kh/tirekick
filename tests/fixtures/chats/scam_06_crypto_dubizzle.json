@@ -1,0 +1,14 @@
+{
+  "label": "scam",
+  "description": "Crypto payment (UAE).",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Salam, is the Patrol still for sale?"
+    },
+    {
+      "role": "seller",
+      "text": "Yes habibi. Best price if you pay in USDT, I can send the wallet address."
+    }
+  ]
+}

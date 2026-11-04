@@ -1,0 +1,6 @@
+clip,year,make,model,code,vin,masked_light
+clips/cold_honest_01.mp4,2003,Honda,Accord,,,none
+clips/cold_honest_02.mp4,2003,Honda,Accord,,,none
+clips/cold_honest_03_code.mp4,2003,Honda,Accord,K7Q2XM,1HGCM82633A004352,none
+clips/shady_taped_01.mp4,2003,Honda,Accord,,,check_engine
+clips/shady_taped_02.mp4,2003,Honda,Accord,,,check_engine

@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Fake eBay Motors / escrow protection.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hey, what's the lowest you'd take?"
+    },
+    {
+      "role": "seller",
+      "text": "4,000 firm. The sale goes through eBay Motors Protection so you're 100% covered."
+    },
+    {
+      "role": "seller",
+      "text": "Escrow holds the money until you receive the car."
+    }
+  ]
+}

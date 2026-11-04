@@ -5,11 +5,11 @@ from __future__ import annotations
 import logging
 import re
 
-from tirekick.config import env, fake_ai
+from tirekick.config import fake_ai
 from tirekick.models import (
     ChatRole, EvidenceType, NegotiationState, NegotiationStatus, NegotiationTurn, Offer, VerificationReport,
 )
-from tirekick.negotiate.policy import PolicyViolation, check_offer, next_offer_amount
+from tirekick.negotiate.policy import PolicyViolation, check_offer, money_figures, next_offer_amount
 from tirekick.verify import prompts
 from tirekick.verify.challenge import car_label
 
@@ -51,9 +51,23 @@ def template_message(amount: int, report: VerificationReport, cites: list[str], 
     return " ".join(parts)
 
 
+MAX_CHARS = 320
+EV_ID = re.compile(r"\s*[\(\[]?\bEV-\d{1,3}\b[\)\]]?")
+
+
+def clean_model_text(text: str) -> str:
+    """Strip evidence ids (the seller never sees EV-xx), wrapping quotes and extra whitespace."""
+    t = EV_ID.sub("", text or "")
+    t = re.sub(r"\s+([,.!?])", r"\1", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    if len(t) >= 2 and t[0] == t[-1] and t[0] in "\"'\u201c\u201d":
+        t = t[1:-1].strip()
+    return t
+
+
 def _model_message(state: NegotiationState, report: VerificationReport, amount: int, cites: list[str],
                    seller_message: str | None, buyer_instruction: str | None, violation: str | None) -> str:
-    from tirekick.verify.muse import client, model_id
+    from tirekick.verify import muse
 
     by_id = report.evidence_by_id()
     facts = "\n".join(f"- {by_id[c].summary}" for c in cites if c in by_id) or "- (none)"
@@ -67,29 +81,59 @@ def _model_message(state: NegotiationState, report: VerificationReport, amount: 
     )
     if violation:
         user += f"\nYour previous draft was rejected: {violation}. Fix that."
-    resp = client().chat.completions.create(
-        model=model_id(), temperature=0.4,
-        messages=[{"role": "system", "content": prompts.OFFER_SYSTEM}, {"role": "user", "content": user}],
-    )
-    return (resp.choices[0].message.content or "").strip().strip('"')
+    text = muse.chat_text([{"role": "system", "content": prompts.OFFER_SYSTEM}, {"role": "user", "content": user}],
+                          temperature=0.4, tag="offer")
+    return clean_model_text(text)
+
+
+def _agent_checks(offer: Offer, currency: str) -> None:
+    """Rules on the model's words that sit on top of policy.check_offer."""
+    if not offer.message_text:
+        raise PolicyViolation("the message is empty")
+    if len(offer.message_text) > MAX_CHARS:
+        raise PolicyViolation(f"the message is {len(offer.message_text)} characters; keep it under {MAX_CHARS}")
+    if offer.amount is not None and offer.amount not in money_figures(offer.message_text):
+        raise PolicyViolation(f"the message must state the offer as {money(offer.amount, currency)}")
+
+
+def _supported(report: VerificationReport, cites: list[str]) -> bool:
+    return bool(cites) or bool(report.comps and report.comps.n >= 3)
 
 
 def draft_offer(state: NegotiationState, report: VerificationReport, seller_message: str | None = None,
                 buyer_instruction: str | None = None) -> Offer:
-    """Always returns an Offer that passes check_offer."""
+    """Always returns an Offer that passes check_offer.
+
+    The amount comes from policy.next_offer_amount (code). Muse Spark writes the words; a draft that
+    breaks a rule is retried once with the violation in the prompt, then replaced by the template.
+    """
     amount = next_offer_amount(state, report)
     cites = choose_cites(report)
     is_final = state.last_seller_ask is not None and amount >= state.last_seller_ask
-    if not fake_ai() and env("META_API_KEY"):
+    if amount < state.asking_price and not is_final and not _supported(report, cites):
+        # SPEC 7 rule 2: no reduction without verified evidence or >= 3 comps. Nothing to cite, so
+        # offer the asking price if the buyer can afford it, otherwise a polite pass.
+        if state.asking_price <= state.buyer_ceiling:
+            amount = state.asking_price
+            is_final = state.last_seller_ask is not None and amount >= state.last_seller_ask
+        else:
+            offer = walk_away_offer(state)
+            check_offer(offer, state, report)
+            return offer
+    from tirekick.verify import muse
+
+    if not fake_ai() and muse.available():
         violation = None
         for _ in range(2):
             try:
                 text = _model_message(state, report, amount, cites, seller_message, buyer_instruction, violation)
                 offer = Offer(amount=amount, cites=cites, message_text=text, is_final=is_final)
+                _agent_checks(offer, state.currency)
                 check_offer(offer, state, report)
                 return offer
             except PolicyViolation as e:
                 violation = str(e)
+                log.info("offer draft rejected: %s", e)
             except Exception as e:  # noqa: BLE001 - model/API failure falls back to the template
                 log.warning("offer drafting failed: %s", e)
                 break
@@ -136,13 +180,27 @@ def extract_price(text: str, asking: int) -> int | None:
     return found
 
 
+# "okay I can't go that low" is a refusal, not a deal: any refusal wording overrides "ok/yes/deal".
+REFUSAL = re.compile(
+    r"\b(can'?t|cannot|can not|won'?t|wont|couldn'?t|not (go|going|able|willing|possible|happening|interested)|"
+    r"no|no way|no deal|nope|too low|lowball|firm|not that low|best i can do is|don'?t think so|pass)\b",
+    re.IGNORECASE,
+)
+_HARMLESS_NO = re.compile(r"\bno (problem|worries|prob)\b", re.IGNORECASE)
+
+
+def is_acceptance(text: str | None) -> bool:
+    t = _HARMLESS_NO.sub("", text or "")
+    return bool(ACCEPT.search(t)) and not REFUSAL.search(t)
+
+
 def apply_seller_reply(state: NegotiationState, text: str) -> NegotiationState:
     s = state.model_copy(deep=True)
     price = extract_price(text, s.asking_price)
     s.turns.append(NegotiationTurn(role=ChatRole.SELLER, text=text, amount=price))
     s.rounds += 1
     s.status = NegotiationStatus.IN_PROGRESS
-    if price is None and ACCEPT.search(text or "") and s.last_offer is not None:
+    if price is None and is_acceptance(text) and s.last_offer is not None:
         s.last_seller_ask = s.last_offer
         s.status = NegotiationStatus.AGREED
     elif price is not None:

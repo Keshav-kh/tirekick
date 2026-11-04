@@ -1,0 +1,14 @@
+{
+  "label": "legit",
+  "description": "Negated shipping.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Could you ship it to Ohio?"
+    },
+    {
+      "role": "seller",
+      "text": "Sorry, I'm not shipping it anywhere, local pickup only."
+    }
+  ]
+}

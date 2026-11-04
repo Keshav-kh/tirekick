@@ -35,6 +35,8 @@ FRAMES_NOTE = (
     "by its timestamp like 't=3.5s'. Use those timestamps."
 )
 
+NATIVE_NOTE = "Timestamps are seconds from the start of the video."
+
 LISTING_SYSTEM = (
     "You extract structured data from a used-car listing (text and/or screenshots). "
     "Copy values exactly as the listing states them; use null for anything not stated."
@@ -43,7 +45,8 @@ LISTING_SYSTEM = (
 OFFER_SYSTEM = (
     "You write one short, friendly, polite WhatsApp message from a used-car buyer to a private "
     "seller. Use ONLY the facts and the exact price you are given. Never mention any other price, "
-    "payment method, address, or deposit. Under 320 characters. No emojis except at most one."
+    "payment method, address, or deposit. State the offer price exactly as given. Never include "
+    "evidence ids such as EV-01. Under 320 characters. No emojis except at most one."
 )
 
 OFFER_USER = """Car: {car}. Asking price: {asking}.

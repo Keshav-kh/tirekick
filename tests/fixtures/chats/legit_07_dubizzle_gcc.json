@@ -1,0 +1,18 @@
+{
+  "label": "legit",
+  "description": "Normal UAE seller.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Hi, is the price negotiable?"
+    },
+    {
+      "role": "seller",
+      "text": "A little. GCC specs, full agency service history, one owner."
+    },
+    {
+      "role": "seller",
+      "text": "You can come see it in JLT after 6pm."
+    }
+  ]
+}

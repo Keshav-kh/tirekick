@@ -1,0 +1,18 @@
+{
+  "label": "legit",
+  "description": "Normal meetup and cashier's check.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "When can I see it?"
+    },
+    {
+      "role": "seller",
+      "text": "Saturday morning works. Cash or cashier's check at the bank is fine."
+    },
+    {
+      "role": "seller",
+      "text": "The title is clean and in my name."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "label": "legit",
+  "description": "Deposit mentioned only after the proof video.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Thanks, the code was K7Q2XM"
+    },
+    {
+      "role": "seller",
+      "text": "",
+      "media_type": "video/mp4"
+    },
+    {
+      "role": "seller",
+      "text": "Here's the video. If you like it you can put down a deposit when you see it in person."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Refuses the proof video.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Could you film the short video with the code?"
+    },
+    {
+      "role": "seller",
+      "text": "No video, my phone camera is broken. Car is perfect, trust me."
+    },
+    {
+      "role": "seller",
+      "text": "Just come with cash."
+    }
+  ]
+}

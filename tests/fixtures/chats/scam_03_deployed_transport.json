@@ -1,0 +1,18 @@
+{
+  "label": "scam",
+  "description": "Classic military deployment + transport company script.",
+  "messages": [
+    {
+      "role": "buyer",
+      "text": "Is it available? Can I see it this weekend?"
+    },
+    {
+      "role": "seller",
+      "text": "I'm deployed right now so I can't meet. The car is already with a transport company."
+    },
+    {
+      "role": "seller",
+      "text": "They deliver to your door and you get 5 days to inspect."
+    }
+  ]
+}
