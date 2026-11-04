@@ -3,147 +3,257 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TireKick: buyer and seller chat</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<title>TireKick web chat</title>
 <style>
+  /* WhatsApp light theme on a Facebook canvas. One family: the system stack WhatsApp Web uses. */
   :root {
-    --bay: #E3E5E1;        /* inspection-bay concrete */
-    --ink: #1C2B36;        /* VIN-plate navy */
-    --paper: #FFFFFF;
-    --rule: #C9CDC8;
-    --muted: #5E6A70;
-    --amber: #E8A317;      /* warning lamp */
-    --green: #2F9E5B;
-    --red: #C8372D;
-    --lamp-off: #B8BDB7;
+    --canvas: #F0F2F5;
+    --bar: #FFFFFF;
+    --teal: #008069;
+    --wall: #EFEAE2;
+    --out: #D9FDD3;
+    --in: #FFFFFF;
+    --ink: #111B21;
+    --sub: #667781;
+    --line: #E9EDEF;
+    --green: #00A884;
+    --tick: #53BDEB;
+    --link: #027EB5;
+    --pin-red: #EA0038;
+    --pin-amber: #F5A623;
+    --pin-green: #25D366;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
   body {
-    background: var(--bay); color: var(--ink);
-    font: 16px/1.45 "Barlow", system-ui, -apple-system, sans-serif;
+    background: var(--canvas); color: var(--ink);
+    font: 14.2px/1.4 "Segoe UI", "Helvetica Neue", Helvetica, "Lucida Grande", Arial, Ubuntu, Cantarell, sans-serif;
     display: flex; flex-direction: column;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    display: flex; align-items: center; gap: 24px;
-    padding: 14px 28px; border-bottom: 2px solid var(--ink);
+  button, select, textarea, input { font: inherit; color: inherit; }
+
+  /* Top bar, Facebook style */
+  .topbar {
+    height: 56px; flex: none; display: flex; align-items: center; gap: 12px;
+    padding: 0 20px; background: var(--bar); box-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+    position: relative; z-index: 2;
   }
-  .brand { font: 700 26px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: .01em; }
-  .tagline { color: var(--muted); font-size: 15px; }
-  .cluster {
-    margin-left: auto; display: flex; align-items: center; gap: 14px;
-    background: var(--ink); color: #DCE3E6; padding: 8px 16px 8px 14px; border-radius: 22px;
-  }
-  .lamp { width: 14px; height: 14px; border-radius: 50%; background: #3A4954; transition: background .25s, box-shadow .25s; }
-  .lamp.on.green { background: var(--green); box-shadow: 0 0 10px var(--green); }
-  .lamp.on.amber { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
-  .lamp.on.red   { background: var(--red);   box-shadow: 0 0 10px var(--red); }
-  .verdict { font-weight: 600; min-width: 14ch; font-size: 15px; }
+  .logo { width: 36px; height: 36px; border-radius: 50%; background: var(--green); display: grid; place-items: center; flex: none; }
+  .wordmark { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+  .topbar p { margin: 0; color: var(--sub); font-size: 15px; }
   .reset {
-    font: 600 15px "Barlow", sans-serif; color: var(--ink); background: transparent;
-    border: 2px solid var(--ink); border-radius: 8px; padding: 7px 14px; cursor: pointer;
+    margin-left: auto; background: #E4E6EB; border: 0; border-radius: 6px; padding: 8px 14px;
+    font-weight: 600; font-size: 15px; cursor: pointer;
   }
-  main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 24px 28px; min-height: 0; }
-  .pane { display: flex; flex-direction: column; min-height: 0; background: var(--paper); border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; }
-  .pane > h2 {
-    margin: 0; padding: 12px 18px; font: 700 21px/1.2 "Barlow Semi Condensed", sans-serif;
-    border-bottom: 1px solid var(--rule); display: flex; align-items: baseline; gap: 10px;
+  .reset:hover { background: #D8DADF; }
+
+  /* Two phones */
+  main {
+    flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 520px));
+    justify-content: center; gap: 32px; padding: 20px 20px 24px;
   }
-  .pane > h2 small { font: 400 15px "Barlow", sans-serif; color: var(--muted); }
-  .log { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; background: #F4F5F3; }
-  .empty { color: var(--muted); max-width: 46ch; }
-  .msg { max-width: 82%; padding: 10px 14px; border-radius: 12px; white-space: pre-wrap; word-wrap: break-word; }
-  .msg.bot { align-self: flex-start; background: var(--paper); border: 1px solid var(--rule); border-left: 4px solid var(--ink); border-radius: 4px 12px 12px 4px; }
-  .msg.me  { align-self: flex-end; background: var(--ink); color: #fff; border-bottom-right-radius: 4px; }
-  .msg.me.media { font-style: italic; }
-  .msg a { color: inherit; font-weight: 600; }
-  .msg img { max-width: 100%; border-radius: 8px; display: block; margin-bottom: 6px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .chips button, .join {
-    font: 600 15px "Barlow", sans-serif; border: 2px solid var(--ink); background: var(--paper); color: var(--ink);
-    border-radius: 18px; padding: 5px 14px; cursor: pointer;
+  .phone { display: flex; flex-direction: column; min-height: 0; }
+  .owner { margin: 0 0 8px 4px; font-size: 15px; font-weight: 600; color: var(--sub); }
+  .chat {
+    flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+    border-radius: 10px; background: var(--wall); box-shadow: 0 1px 3px rgba(11, 20, 26, .16);
   }
-  .chips button:hover, .join:hover { background: var(--ink); color: #fff; }
-  .typing { align-self: flex-start; color: var(--muted); font-style: italic; }
-  form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--rule); align-items: center; flex-wrap: wrap; }
+
+  /* Chat header */
+  .chat-head { flex: none; display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--teal); color: #fff; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: #fff; display: grid; place-items: center; flex: none; }
+  .who { min-width: 0; }
+  .who strong { display: flex; align-items: center; gap: 5px; font-size: 16px; font-weight: 600; }
+  .who span { display: block; font-size: 13px; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .who span.typing-now { opacity: 1; }
+
+  /* Pinned verdict (buyer side) */
+  .pin {
+    flex: none; display: flex; align-items: center; gap: 10px; padding: 8px 16px;
+    background: #fff; border-bottom: 1px solid var(--line); color: var(--sub); font-size: 13.5px;
+  }
+  .pin-dot { width: 10px; height: 10px; border-radius: 50%; background: #C5CDD1; flex: none; }
+  .pin[data-v="red"] .pin-dot { background: var(--pin-red); }
+  .pin[data-v="amber"] .pin-dot { background: var(--pin-amber); }
+  .pin[data-v="green"] .pin-dot { background: var(--pin-green); }
+  .pin b { color: var(--ink); font-weight: 600; }
+  .pin[data-v] { animation: pinflash .9s ease-out 1; }
+  @keyframes pinflash { from { background: #FFF5C4; } to { background: #fff; } }
+
+  /* Message log */
+  .log {
+    flex: 1; overflow-y: auto; padding: 12px 6% 16px; display: flex; flex-direction: column; gap: 2px;
+    background-color: var(--wall);
+    background-image: radial-gradient(rgba(0, 0, 0, .035) 1px, transparent 1.2px);
+    background-size: 18px 18px;
+  }
+  .day {
+    align-self: center; margin: 4px 0 10px; padding: 5px 12px; border-radius: 7.5px;
+    background: #fff; color: var(--sub); font-size: 12.5px; box-shadow: 0 1px .5px rgba(11, 20, 26, .13);
+  }
+  .notice {
+    align-self: center; max-width: 92%; margin-bottom: 12px; padding: 6px 12px; border-radius: 7.5px;
+    background: #FFEECD; color: #54656F; font-size: 12.5px; text-align: center; box-shadow: 0 1px .5px rgba(11, 20, 26, .13);
+  }
+
+  .msg {
+    position: relative; max-width: 85%; margin-top: 6px; padding: 6px 9px 8px; border-radius: 7.5px;
+    white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 1px .5px rgba(11, 20, 26, .13);
+  }
+  .msg.bot { align-self: flex-start; background: var(--in); border-top-left-radius: 0; }
+  .msg.me  { align-self: flex-end; background: var(--out); border-top-right-radius: 0; }
+  .msg.bot::before, .msg.me::before { content: ""; position: absolute; top: 0; width: 8px; height: 13px; }
+  .msg.bot::before { left: -8px; background: var(--in); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .msg.me::before  { right: -8px; background: var(--out); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .msg + .msg.bot.cont, .msg.me + .msg.me { margin-top: 2px; }
+  .msg a { color: var(--link); text-decoration: none; }
+  .msg a:hover { text-decoration: underline; }
+  .msg img { display: block; max-width: 100%; border-radius: 6px; margin: -2px -5px 6px; }
+  .meta {
+    display: flex; justify-content: flex-end; align-items: center; gap: 3px;
+    margin: 1px -3px -4px 12px; color: var(--sub); font-size: 11px; line-height: 15px; white-space: nowrap;
+  }
+  .meta svg { color: var(--tick); }
+
+  /* WhatsApp reply buttons live inside the bubble, under a hairline */
+  .chips { display: flex; flex-direction: column; margin: 8px -9px -8px; border-top: 1px solid var(--line); white-space: normal; }
+  .chips button {
+    border: 0; background: none; padding: 10px 8px; color: var(--link); font-weight: 500; font-size: 14.5px; cursor: pointer;
+  }
+  .chips button + button { border-top: 1px solid var(--line); }
+  .chips button:hover { background: #F5F6F6; }
+  .chips.used button { color: var(--sub); cursor: default; background: none; }
+
+  /* Video bubble */
+  .video { display: grid; place-items: center; width: 240px; max-width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; margin: -2px -5px 4px; background: #1F2C33; }
+  .video span { width: 46px; height: 46px; border-radius: 50%; background: rgba(0, 0, 0, .45); display: grid; place-items: center; }
+  .file-name { font-size: 13px; color: var(--sub); }
+
+  /* Link preview with the join action (seller side) */
+  .preview { margin: -2px -5px 6px; border-radius: 6px; overflow: hidden; background: #F0F2F5; white-space: normal; }
+  .preview div { padding: 8px 10px; }
+  .preview b { display: block; font-weight: 600; }
+  .preview small { color: var(--sub); font-size: 12.5px; }
+  .join { display: block; width: calc(100% + 18px); margin: 8px -9px -8px; padding: 10px; border: 0; border-top: 1px solid var(--line); background: none; color: var(--link); font-size: 14.5px; font-weight: 500; cursor: pointer; }
+  .join:hover { background: #F5F6F6; }
+
+  .hint { align-self: center; max-width: 80%; margin: auto 0; color: var(--sub); text-align: center; font-size: 14px; }
+
+  /* Composer */
+  .composer { flex: none; background: #F0F2F5; padding: 8px 12px 10px; }
+  .row { display: flex; align-items: flex-end; gap: 8px; }
+  .icon-btn { width: 40px; height: 40px; flex: none; border: 0; border-radius: 50%; background: none; color: #54656F; display: grid; place-items: center; cursor: pointer; }
+  .icon-btn:hover { background: #E4E6EB; }
+  .icon-btn[aria-expanded="true"] { background: #DDE1E4; }
   textarea {
-    flex: 1 1 260px; resize: none; height: 46px; font: 16px/1.4 "Barlow", sans-serif; color: var(--ink);
-    border: 2px solid var(--rule); border-radius: 10px; padding: 10px 12px;
+    flex: 1; min-width: 0; resize: none; height: 42px; max-height: 120px; padding: 10px 14px; border: 0; border-radius: 8px;
+    background: #fff; font-size: 15px; line-height: 1.45;
   }
-  textarea:focus { border-color: var(--ink); outline: none; }
-  .send { font: 600 16px "Barlow", sans-serif; background: var(--ink); color: #fff; border: 0; border-radius: 10px; padding: 12px 18px; cursor: pointer; }
-  .send[disabled] { opacity: .5; cursor: wait; }
-  .attach { display: flex; gap: 8px; align-items: center; flex: 1 1 100%; }
-  select, .file {
-    font: 15px "Barlow", sans-serif; color: var(--ink); border: 2px solid var(--rule); border-radius: 10px; padding: 7px 10px; background: var(--paper);
-  }
-  select { flex: 1; min-width: 0; }
-  .attach button { font: 600 15px "Barlow", sans-serif; border: 2px solid var(--ink); background: var(--paper); border-radius: 10px; padding: 7px 12px; cursor: pointer; }
-  footer { padding: 0 28px 14px; color: var(--muted); font-size: 14px; }
-  :focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
-  @keyframes keyon { 0%, 70% { background: var(--amber); box-shadow: 0 0 10px var(--amber); } 100% { background: #3A4954; } }
-  .sweep .lamp { animation: keyon 1.1s ease-out 1; }
-  @media (prefers-reduced-motion: reduce) { .sweep .lamp { animation: none; } .lamp { transition: none; } }
+  textarea::placeholder { color: #8696A0; }
+  textarea:focus { outline: none; box-shadow: 0 0 0 2px rgba(0, 168, 132, .35); }
+  .send { width: 42px; height: 42px; flex: none; border: 0; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; cursor: pointer; }
+  .send:hover { background: #06CF9C; }
+  .send[disabled] { background: #8696A0; cursor: wait; }
+
+  .attach { display: none; gap: 8px; align-items: center; margin-bottom: 8px; padding: 8px; border-radius: 8px; background: #fff; }
+  .attach.open { display: flex; flex-wrap: wrap; }
+  .attach label { width: 100%; font-size: 13px; color: var(--sub); }
+  .attach select, .attach input[type=file] { flex: 1 1 180px; min-width: 0; padding: 7px 8px; border: 1px solid #D1D7DB; border-radius: 6px; background: #fff; font-size: 14px; }
+  .attach button { border: 0; border-radius: 18px; padding: 8px 14px; background: var(--green); color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .attach button:hover { background: #06CF9C; }
+
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .pin[data-v] { animation: none; } }
   @media (max-width: 900px) {
-    main { grid-template-columns: 1fr; }
-    .pane { min-height: 70vh; }
-    header { flex-wrap: wrap; }
-    .cluster { margin-left: 0; }
+    html, body { height: auto; }
+    main { flex: none; grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 12px; }
+    .chat { flex: none; height: 78vh; }
+    .topbar p { display: none; }
   }
 </style>
 </head>
 <body>
-<header>
-  <div>
-    <div class="brand">TireKick</div>
-    <div class="tagline">The car proves itself before anyone haggles.</div>
+<header class="topbar">
+  <div class="logo" aria-hidden="true">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v5.8M12 15.2V21M3 12h5.8M15.2 12H21"/></svg>
   </div>
-  <div class="cluster sweep" id="cluster" aria-live="polite">
-    <span class="lamp green" title="Looks clean"></span>
-    <span class="lamp amber" title="OK to negotiate, a few flags"></span>
-    <span class="lamp red" title="Don't buy"></span>
-    <span class="verdict" id="verdict">No verdict yet</span>
-  </div>
+  <span class="wordmark">TireKick</span>
+  <p>Web chat: the WhatsApp bot, buyer and seller side by side</p>
   <button class="reset" id="reset" type="button">Start over</button>
 </header>
 
 <main>
-  <section class="pane" id="buyer" aria-label="Buyer chat">
-    <h2>Buyer <small>chatting with TireKick</small></h2>
-    <div class="log" id="buyer-log">
-      <p class="empty" id="buyer-empty">Say hi, paste a used-car listing, and give your max price, for example "max 9000".</p>
-    </div>
-    <form id="buyer-form">
-      <textarea id="buyer-text" placeholder="Message TireKick" aria-label="Buyer message"></textarea>
-      <button class="send" type="submit">Send</button>
-      <div class="attach">
-        <input class="file" type="file" id="buyer-file" accept="image/*" aria-label="Listing screenshot">
-        <button type="button" id="buyer-file-send">Send screenshot</button>
+  <section class="phone" aria-label="Buyer chat">
+    <p class="owner">Buyer's phone</p>
+    <div class="chat">
+      <div class="chat-head">
+        <div class="avatar" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00A884" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v5.8M12 15.2V21M3 12h5.8M15.2 12H21"/></svg></div>
+        <div class="who"><strong>TireKick <svg width="16" height="16" viewBox="0 0 24 24" aria-label="Business account"><path fill="#25D366" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3.1 1 3.1-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1-2.6-1.9 1-3.1-1-3.1 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.3l2.6 2.6L16.2 9.3" stroke="#fff" stroke-width="2" fill="none"/></svg></strong>
+          <span id="buyer-status">Business account</span></div>
       </div>
-    </form>
+      <div class="pin" id="cluster" aria-live="polite">
+        <span class="pin-dot"></span>
+        <span>Verdict: <b id="verdict">waiting for the seller's video</b></span>
+      </div>
+      <div class="log" id="buyer-log">
+        <div class="day">Today</div>
+        <div class="notice">Web demo. Messages run through the same TireKick code as the WhatsApp bot.</div>
+        <p class="hint" id="buyer-empty">Paste a used-car listing and your max price, like "max 9000".</p>
+      </div>
+      <form class="composer" id="buyer-form">
+        <div class="attach" id="buyer-attach">
+          <label for="buyer-file">Send a screenshot of the listing</label>
+          <input type="file" id="buyer-file" accept="image/*">
+          <button type="button" id="buyer-file-send">Send screenshot</button>
+        </div>
+        <div class="row">
+          <button class="icon-btn" type="button" data-toggle="buyer-attach" aria-expanded="false" aria-label="Attach a screenshot">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 11.5l-8.6 8.6a5 5 0 01-7.1-7.1l8.6-8.6a3.3 3.3 0 014.7 4.7l-8.6 8.6a1.7 1.7 0 01-2.4-2.4l8-8"/></svg>
+          </button>
+          <textarea id="buyer-text" placeholder="Type a message" aria-label="Buyer message" rows="1"></textarea>
+          <button class="send" type="submit" aria-label="Send">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M2.6 20.3L21.5 12 2.6 3.7l-.1 6.5L15 12 2.5 13.8z"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
   </section>
 
-  <section class="pane" id="seller" aria-label="Seller chat">
-    <h2>Seller <small>joins from the buyer's link</small></h2>
-    <div class="log" id="seller-log">
-      <p class="empty" id="seller-empty">When the buyer's listing is in, a button appears here to join the deal.</p>
+  <section class="phone" aria-label="Seller chat">
+    <p class="owner">Seller's phone</p>
+    <div class="chat">
+      <div class="chat-head">
+        <div class="avatar" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00A884" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v5.8M12 15.2V21M3 12h5.8M15.2 12H21"/></svg></div>
+        <div class="who"><strong>TireKick <svg width="16" height="16" viewBox="0 0 24 24" aria-label="Business account"><path fill="#25D366" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3.1 1 3.1-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1-2.6-1.9 1-3.1-1-3.1 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.3l2.6 2.6L16.2 9.3" stroke="#fff" stroke-width="2" fill="none"/></svg></strong>
+          <span id="seller-status">Business account</span></div>
+      </div>
+      <div class="log" id="seller-log">
+        <div class="day">Today</div>
+        <p class="hint" id="seller-empty">The buyer's link shows up here once they've sent a listing.</p>
+      </div>
+      <form class="composer" id="seller-form">
+        <div class="attach" id="seller-attach">
+          <label for="seller-clip">Send a proof video from this computer</label>
+          <select id="seller-clip"><option value="">Choose a video</option></select>
+          <button type="button" id="seller-clip-send">Send video</button>
+          <label for="seller-file">Or upload one</label>
+          <input type="file" id="seller-file" accept="video/*">
+          <button type="button" id="seller-file-send">Upload and send</button>
+        </div>
+        <div class="row">
+          <button class="icon-btn" type="button" data-toggle="seller-attach" aria-expanded="false" aria-label="Attach a video">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 11.5l-8.6 8.6a5 5 0 01-7.1-7.1l8.6-8.6a3.3 3.3 0 014.7 4.7l-8.6 8.6a1.7 1.7 0 01-2.4-2.4l8-8"/></svg>
+          </button>
+          <textarea id="seller-text" placeholder="Type a message" aria-label="Seller message" rows="1"></textarea>
+          <button class="send" type="submit" aria-label="Send">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M2.6 20.3L21.5 12 2.6 3.7l-.1 6.5L15 12 2.5 13.8z"/></svg>
+          </button>
+        </div>
+      </form>
     </div>
-    <form id="seller-form">
-      <textarea id="seller-text" placeholder="Reply as the seller" aria-label="Seller message"></textarea>
-      <button class="send" type="submit">Send</button>
-      <div class="attach">
-        <select id="seller-clip" aria-label="Proof video on this computer"><option value="">Pick a proof video…</option></select>
-        <button type="button" id="seller-clip-send">Send video</button>
-      </div>
-      <div class="attach">
-        <input class="file" type="file" id="seller-file" accept="video/*" aria-label="Upload a proof video">
-        <button type="button" id="seller-file-send">Upload and send</button>
-      </div>
-    </form>
   </section>
 </main>
-<footer>Web demo of the TireKick WhatsApp bot: the same verification and negotiation code, with each side's messages shown in the browser instead of WhatsApp.</footer>
 
 <script>
 const PEOPLE = { buyer: "15550000101", seller: "15550000202" };
@@ -153,7 +263,11 @@ const seen = new Set();
 let joined = false;
 let busy = 0;
 
+const TICKS = '<svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 6l3 3 6-7.5M6.5 8.6L7 9l6-7.5"/></svg>';
+const PLAY = '<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>';
+
 function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+function hhmm(iso) { const d = iso ? new Date(iso) : new Date(); return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); }
 
 // WhatsApp-style *bold* and bare links, built with DOM nodes (no innerHTML from the server).
 function richText(node, text) {
@@ -167,21 +281,35 @@ function richText(node, text) {
   return node;
 }
 
+function stamp(box, at, mine) {
+  const m = el("span", "meta", hhmm(at));
+  if (mine) m.insertAdjacentHTML("beforeend", TICKS);
+  box.appendChild(m);
+}
+
 function log(side) { return document.getElementById(side + "-log"); }
 function clearEmpty(side) { const e = document.getElementById(side + "-empty"); if (e) e.remove(); }
 function scroll(side) { const l = log(side); l.scrollTop = l.scrollHeight; }
 
 function addMine(side, text, media) {
   clearEmpty(side);
-  log(side).appendChild(el("div", "msg me" + (media ? " media" : ""), text));
+  const box = el("div", "msg me");
+  if (media) {
+    const v = el("div", "video"); const s = el("span"); s.innerHTML = PLAY; v.appendChild(s); box.appendChild(v);
+    box.appendChild(el("span", "file-name", text.replace(/^🎥\s*/, "")));
+  } else {
+    box.appendChild(document.createTextNode(text));
+  }
+  stamp(box, null, true);
+  log(side).appendChild(box);
   scroll(side);
 }
 
 function setVerdict(text) {
-  const map = [["🛑", "red", "Don't buy"], ["⚠️", "amber", "Negotiate with care"], ["✅", "green", "Looks clean"]];
+  const map = [["🛑", "red", "Don't buy"], ["⚠️", "amber", "OK to negotiate, a few flags"], ["✅", "green", "Looks clean"]];
   for (const [mark, color, label] of map) {
     if (text.startsWith(mark + " *")) {
-      document.querySelectorAll(".lamp").forEach(l => l.classList.toggle("on", l.classList.contains(color)));
+      document.getElementById("cluster").dataset.v = color;
       document.getElementById("verdict").textContent = label;
     }
   }
@@ -200,12 +328,13 @@ function addBot(entry) {
     box.appendChild(img); text = entry.image.caption || "";
   }
   richText(box, text);
+  stamp(box, entry.at, false);
   if (entry.type === "interactive") {
     const chips = el("div", "chips");
     for (const b of entry.interactive.action.buttons) {
       const btn = el("button", null, b.reply.title);
       btn.type = "button";
-      btn.onclick = () => send(side, { button_id: b.reply.id, text: b.reply.title });
+      btn.onclick = () => { if (chips.classList.contains("used")) return; chips.classList.add("used"); send(side, { button_id: b.reply.id, text: b.reply.title }); };
       chips.appendChild(btn);
     }
     box.appendChild(chips);
@@ -217,11 +346,19 @@ function addBot(entry) {
   scroll(side);
 }
 
+// The buyer forwards the wa.me link; on the seller's phone it arrives as a link preview.
 function offerJoin(dealId) {
   clearEmpty("seller");
   const wrap = el("div", "msg bot");
-  wrap.appendChild(document.createTextNode("The buyer forwarded you their TireKick link.\n"));
-  const b = el("button", "join", "Open the link and join " + dealId);
+  const card = el("div", "preview");
+  const body = el("div");
+  body.appendChild(el("b", null, "Chat with TireKick on WhatsApp"));
+  body.appendChild(el("small", null, "wa.me"));
+  card.appendChild(body);
+  wrap.appendChild(card);
+  wrap.appendChild(document.createTextNode("The buyer sent you this link. Opening it sends " + dealId + " to TireKick."));
+  stamp(wrap, null, false);
+  const b = el("button", "join", "Open link");
   b.type = "button";
   b.onclick = () => { joined = true; wrap.remove(); send("seller", { text: dealId }); };
   wrap.appendChild(b);
@@ -241,20 +378,16 @@ async function poll() {
   } catch (e) { /* server restarting; try again next tick */ }
 }
 
+// WhatsApp shows "typing…" in the chat header.
 function typing(side, on) {
-  const id = side + "-typing";
-  const old = document.getElementById(id);
-  if (!on) { if (old) old.remove(); return; }
-  if (old) return;
-  const t = el("div", "typing", side === "seller" ? "TireKick is checking…" : "TireKick is working on it…");
-  t.id = id;
-  log(side).appendChild(t);
-  scroll(side);
+  const s = document.getElementById(side + "-status");
+  s.textContent = on ? (side === "seller" ? "checking your video…" : "typing…") : "Business account";
+  s.classList.toggle("typing-now", on);
 }
 
 async function send(side, body) {
-  const label = body.media_path ? "🎥 " + body.media_path.split("/").pop() : body.text;
-  if (label) addMine(side, label, !!body.media_path);
+  if (body.media_path) addMine(side, body.media_path.split("/").pop(), true);
+  else if (body.text) addMine(side, body.text, false);
   busy++;
   document.querySelectorAll(".send").forEach(b => b.disabled = true);
   typing(side, true);
@@ -263,7 +396,7 @@ async function send(side, body) {
       body: JSON.stringify({ from: PEOPLE[side], ...body }) });
     if (!r.ok) addBot({ to: PEOPLE[side], type: "text", text: { body: "The demo server returned an error (" + r.status + "). Check its terminal." } });
   } catch (e) {
-    addBot({ to: PEOPLE[side], type: "text", text: { body: "Can't reach the demo server. Is it still running?" } });
+    addBot({ to: PEOPLE[side], type: "text", text: { body: "Can't reach the demo server. Check that it's still running." } });
   } finally {
     busy--;
     typing(side, false);
@@ -279,18 +412,34 @@ for (const side of ["buyer", "seller"]) {
     const text = box.value.trim();
     if (!text) return;
     box.value = "";
+    box.style.height = "";
     send(side, { text });
   });
-  document.getElementById(side + "-text").addEventListener("keydown", e => {
+  const ta = document.getElementById(side + "-text");
+  ta.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); document.getElementById(side + "-form").requestSubmit(); }
   });
+  ta.addEventListener("input", () => { ta.style.height = ""; ta.style.height = Math.min(ta.scrollHeight, 120) + "px"; });
+}
+
+document.querySelectorAll("[data-toggle]").forEach(btn => {
+  btn.onclick = () => {
+    const panel = document.getElementById(btn.dataset.toggle);
+    const open = panel.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+  };
+});
+function closeAttach(side) {
+  document.getElementById(side + "-attach").classList.remove("open");
+  document.querySelector(`[data-toggle="${side}-attach"]`).setAttribute("aria-expanded", "false");
 }
 
 async function upload(inputId, side) {
   const f = document.getElementById(inputId).files[0];
   if (!f) return;
+  closeAttach(side);
   const r = await fetch("/demo/upload?name=" + encodeURIComponent(f.name), { method: "POST", body: f });
-  if (!r.ok) { addBot({ to: PEOPLE[side], type: "text", text: { body: "That file couldn't be uploaded. Send an .mp4/.mov video or an image." } }); return; }
+  if (!r.ok) { addBot({ to: PEOPLE[side], type: "text", text: { body: "That file wasn't sent. Send an .mp4 or .mov video, or an image." } }); return; }
   const { path } = await r.json();
   send(side, { media_path: path });
 }
@@ -298,7 +447,9 @@ document.getElementById("buyer-file-send").onclick = () => upload("buyer-file", 
 document.getElementById("seller-file-send").onclick = () => upload("seller-file", "seller");
 document.getElementById("seller-clip-send").onclick = () => {
   const p = document.getElementById("seller-clip").value;
-  if (p) send("seller", { media_path: p });
+  if (!p) return;
+  closeAttach("seller");
+  send("seller", { media_path: p });
 };
 
 fetch("/demo/clips").then(r => r.json()).then(({ clips }) => {
@@ -312,7 +463,6 @@ document.getElementById("reset").onclick = async () => {
   location.reload();
 };
 
-setTimeout(() => document.getElementById("cluster").classList.remove("sweep"), 1200);
 setInterval(poll, 1500);
 </script>
 </body>
