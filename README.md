@@ -4,7 +4,30 @@
 
 TireKick is a WhatsApp buyer's agent for private used-car sales (Facebook Marketplace in the US, dubizzle in the UAE). Before any negotiation, the seller has to film one continuous **proof-of-car** take that answers a one-time challenge code. TireKick verifies that take with Muse Spark plus deterministic checks (VIN check digit, NHTSA decode, recalls). Then it negotiates on the buyer's behalf. Every concession it asks for must cite verified evidence, the price ceiling is enforced in code, and the buyer approves every message before it is sent.
 
-Built for the **Meta Global AI Developer Hackathon** (Indie track, theme "Build for Your World"). Submissions are due **Wed Nov 4, 2026, 9:00 PM ET**. Our internal target is **noon ET** that day.
+Built for the **Meta Global AI Developer Hackathon** (Indie track, theme "Build for Your World").
+
+## Results
+
+Full method, data and caveats in [eval/RESULTS.md](eval/RESULTS.md). The video tests use AI-generated clips and the negotiation study uses AI-played sellers (no real car was available during the hackathon).
+
+| Study | Result |
+|---|---|
+| Red team: 6 spoof attempts (AI-generated take, old video / wrong code, different car) | **6/6 caught** for the expected reason (false-alarm rate on real honest takes untested) |
+| Negotiation: 60 simulated negotiations | TireKick **84%** of the available discount vs **51%** for a student alone; **30/30** deals vs **15/30** |
+| 200 public listings (US Cars dataset) | **96%** are a model with at least one NHTSA recall |
+| Light check: dark check-engine light | **0/3 caught**: "can't tell" was treated as a pass; fix identified |
+
+Demo video: (link)
+
+## Run the web demo (no WhatsApp needed)
+
+Buyer and seller side by side in the browser, running the same bot code as the WhatsApp version:
+
+```bash
+TIREKICK_DEV=1 uvicorn webchat_server:app --app-dir demo --port 8000
+# open http://localhost:8000/demo
+# add TIREKICK_FAKE_AI=1 to run without API keys (sample data)
+```
 
 ---
 
@@ -65,7 +88,7 @@ python scripts/verify_clip.py --video samples/coldstart.mp4 --code K7Q2XM --list
 
 ## Status
 
-- [ ] Day-1 test passed (Muse Spark reads the dashboard lights; see [workstream B](docs/workstream-B-intelligence.md#0-day-1-test-do-this-first))
-- [ ] Integration 1 (Mon Nov 2, 9 PM ET)
-- [ ] Feature freeze (Tue Nov 3, 9 PM ET)
-- [ ] Submitted (Wed Nov 4, noon ET)
+- [x] All three workstreams merged; tests pass
+- [x] Evaluation complete ([eval/RESULTS.md](eval/RESULTS.md))
+- [x] Web demo (`demo/webchat_server.py`); WhatsApp delivery pending Meta business verification
+- [ ] Submitted (Wed Nov 4, 2026)
