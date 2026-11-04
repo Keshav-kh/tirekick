@@ -57,8 +57,6 @@ def test_seller_floor_is_enforced_in_code():
     assert move.action == "counter" and move.price == card["reservation"]
 
 
-@pytest.mark.xfail(reason="Known parser bug for B: a refusal containing 'okay' with no price reads as agreement",
-                   strict=False)
 def test_refusal_with_okay_is_not_agreement():
     card = sim.load_cards()[0]
     buyer = sim.TireKickBuyer(card, max_rounds=6)
