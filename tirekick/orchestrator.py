@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import re
+import threading
 
 from tirekick import negotiate, store, verify
 from tirekick.config import env
@@ -26,6 +27,10 @@ MAX_PRICE = re.compile(r"\bmax(?:imum)?\s*(?:is|of|:)?\s*\$?\s*(\d{1,3}(?:,\d{3}
 EV_ID = re.compile(r"\s*\(?\bEV-\d{2}\b\)?")
 SEVERITY_ICON = {Severity.RED: "🔴", Severity.YELLOW: "🟡", Severity.GREEN: "🟢"}
 APPROVAL_BUTTONS = [("send", "✅ Send"), ("edit", "✏️ Edit"), ("stop", "🛑 Stop")]
+RESET_WORDS = {"reset", "new", "restart"}
+# ponytail: one global lock around every deal read-modify-write so concurrent webhook tasks can't
+# clobber each other's JSON. Verification (~90 s) runs outside it. Per-deal locks if throughput matters.
+_LOCK = threading.Lock()
 
 GREETING = ("Hi! I'm TireKick 🚗 Paste a car listing (link, text or screenshots) and your max price, "
             "e.g. 'max 9000'. I'll make the seller prove the car before we negotiate.")
@@ -106,17 +111,38 @@ def buyer_summary(deal: Deal, report: VerificationReport) -> str:
 
 
 def handle_message(msg: IncomingMessage) -> None:
+    with _LOCK:
+        job = _route(msg)
+    if job:
+        _verify_and_report(*job)
+
+
+def _route(msg: IncomingMessage) -> tuple[str, str] | None:
+    """Returns (deal_id, video_path) when a proof video needs verifying outside the lock."""
     if store.already_processed(msg.message_id):
         return
+    if (msg.text or "").strip().lower() in RESET_WORDS:
+        return _reset(msg.wa_id)
+    code = DEAL_CODE.search(msg.text or "")  # before the seller lookup, so a past seller can join a new deal
+    if code:
+        deal = store.get_deal(code.group(0).upper())
+        if (deal and deal.status == DealStatus.LISTING_PARSED and store.is_active(deal)
+                and deal.seller_wa_id is None and msg.wa_id != deal.buyer_wa_id):
+            return on_seller_join(deal, msg)
     seller_deal = store.find_deal_by_seller(msg.wa_id)
     if seller_deal:
         return on_seller_message(seller_deal, msg)
-    code = DEAL_CODE.search(msg.text or "")
-    if code:
-        deal = store.get_deal(code.group(0).upper())
-        if deal and deal.seller_wa_id is None and msg.wa_id != deal.buyer_wa_id:
-            return on_seller_join(deal, msg)
     return on_buyer_message(msg)
+
+
+def _reset(wa_id: str) -> None:
+    for deal in store.active_deals_for(wa_id):
+        deal.status = DealStatus.EXPIRED
+        deal.pending_draft = None
+        store.save_deal(deal)
+        if wa_id == deal.seller_wa_id:
+            wa.send_text(deal.buyer_wa_id, f"The seller left {deal.deal_id}. Paste another listing anytime.")
+    wa.send_text(wa_id, GREETING)
 
 
 # --------------------------------------------------------------------------- buyer side
@@ -233,7 +259,7 @@ def on_seller_join(deal: Deal, msg: IncomingMessage) -> None:
     store.save_deal(deal)
 
 
-def on_seller_message(deal: Deal, msg: IncomingMessage) -> None:
+def on_seller_message(deal: Deal, msg: IncomingMessage) -> tuple[str, str] | None:
     media = _media_path(msg) if (msg.media_id or msg.local_media_path) else None
     _record(deal, ChatRole.SELLER, msg, media_path=media)
     is_video = bool(media) and ((msg.mime_type or "").startswith("video") or msg.type == "video"
@@ -245,7 +271,7 @@ def on_seller_message(deal: Deal, msg: IncomingMessage) -> None:
         wa.send_text(deal.buyer_wa_id, "🎥 Proof video received. Verifying (about 1 minute)…")
         deal.status = DealStatus.PROOF_RECEIVED
         store.save_deal(deal)
-        _verify_and_report(deal, media)
+        return deal.deal_id, media
     elif deal.status == DealStatus.CHALLENGE_SENT:
         if "?" in (msg.text or ""):
             wa.send_text(deal.seller_wa_id, "Just send the one-take video whenever you're ready. The steps are in my message above 🙂")
@@ -254,8 +280,27 @@ def on_seller_message(deal: Deal, msg: IncomingMessage) -> None:
     store.save_deal(deal)
 
 
-def _verify_and_report(deal: Deal, video_path: str) -> None:
-    report = verify.run_verification(deal, video_path)
+def _verify_and_report(deal_id: str, video_path: str) -> None:
+    """Runs unlocked; re-takes the lock and reloads the deal to apply the result."""
+    report = None
+    try:
+        report = verify.run_verification(store.get_deal(deal_id), video_path)
+    except Exception:  # noqa: BLE001 - never leave the deal stuck in PROOF_RECEIVED
+        log.exception("verification failed for %s", deal_id)
+    with _LOCK:
+        deal = store.get_deal(deal_id)  # fresh copy: messages may have arrived meanwhile
+        if deal.status != DealStatus.PROOF_RECEIVED:  # e.g. buyer typed "reset" while we waited
+            return
+        _apply_report(deal, report)
+        store.save_deal(deal)
+
+
+def _apply_report(deal: Deal, report: VerificationReport | None) -> None:
+    if report is None:
+        deal.status = DealStatus.CHALLENGE_SENT
+        wa.send_text(deal.seller_wa_id, "Sorry, I couldn't process that video. Could you send the take again?")
+        wa.send_text(deal.buyer_wa_id, "⚠️ I couldn't check that video, so I've asked the seller to resend it.")
+        return
     deal.report = report
     wa.send_text(deal.buyer_wa_id, buyer_summary(deal, report))
     if report.verdict == Severity.RED:

@@ -71,3 +71,72 @@ def test_duplicate_webhook_delivery_is_ignored():
     orchestrator.handle_message(msg)
     orchestrator.handle_message(msg)
     assert len(to(BUYER)) == 1
+
+
+def test_verification_crash_asks_seller_to_resend(monkeypatch):
+    from tirekick import verify
+
+    def boom(deal, path):
+        raise RuntimeError("Muse down")
+
+    real = verify.run_verification
+    say(BUYER, LISTING)
+    code = deal_code()
+    say(SELLER, code)
+    monkeypatch.setattr(verify, "run_verification", boom)
+    say(SELLER, media="clips/honest_accord_01.mp4")
+    assert store.get_deal(code).status == DealStatus.CHALLENGE_SENT
+    assert "resend" in to(BUYER)[-1]["text"]["body"]
+    monkeypatch.setattr(verify, "run_verification", real)
+    say(SELLER, media="clips/honest_accord_01.mp4")   # the retry goes through
+    assert store.get_deal(code).status == DealStatus.NEGOTIATING
+
+
+def test_past_seller_can_join_a_new_deal_and_reset_unwedges():
+    say(BUYER, LISTING)
+    first = deal_code()
+    say(SELLER, first)
+    say(BUYER, "reset")
+    assert store.get_deal(first).status == DealStatus.EXPIRED
+    say(BUYER, LISTING)
+    second = re.findall(r"DEAL-\d{4}", " ".join(m.get("text", {}).get("body", "") for m in to(BUYER)))[-1]
+    assert second != first
+    say(SELLER, second)
+    assert store.get_deal(second).seller_wa_id == SELLER
+    assert store.get_deal(second).status == DealStatus.CHALLENGE_SENT
+
+
+def test_stale_deal_expires():
+    from datetime import timedelta
+
+    say(BUYER, LISTING)
+    deal = store.get_deal(deal_code())
+    deal.updated_at -= timedelta(hours=25)
+    store._path(deal.deal_id).write_text(deal.model_dump_json(), encoding="utf-8")  # bypass save's timestamp
+    assert store.find_active_deal_by_buyer(BUYER) is None
+
+
+def test_messages_during_verification_are_not_blocked_or_clobbered(monkeypatch):
+    from tirekick import verify
+
+    real = verify.run_verification
+
+    def slow(deal, path):  # a buyer message lands mid-verification; would deadlock if the lock were held
+        say(BUYER, "reset")
+        return real(deal, path)
+
+    say(BUYER, LISTING)
+    code = deal_code()
+    say(SELLER, code)
+    monkeypatch.setattr(verify, "run_verification", slow)
+    say(SELLER, media="clips/honest_accord_01.mp4")
+    deal = store.get_deal(code)
+    assert deal.status == DealStatus.EXPIRED and deal.report is None   # stale result dropped, reset kept
+
+
+def test_join_code_only_works_once_listing_is_ready():
+    say(BUYER, "hi")                                  # deal exists but is still NEW
+    code = deal_code() if "DEAL-" in str(to(BUYER)) else store.find_active_deal_by_buyer(BUYER).deal_id
+    say(SELLER, code)
+    deal = store.get_deal(code)
+    assert deal.seller_wa_id is None and deal.status == DealStatus.NEW
