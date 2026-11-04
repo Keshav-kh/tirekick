@@ -30,12 +30,16 @@ def real(monkeypatch):
     def analysis(video, ch, listing, runs):
         seen["runs"] = runs
         seen["analysis_thread"] = threading.get_ident()
+        seen["analysis_span"] = [time.monotonic()]
         time.sleep(0.2)
+        seen["analysis_span"].append(time.monotonic())
         return fake.analyze_proof_take(video, ch, listing, runs)
 
     def comps(listing):
         seen["comps_thread"] = threading.get_ident()
+        seen["comps_span"] = [time.monotonic()]
         time.sleep(0.2)
+        seen["comps_span"].append(time.monotonic())
         return PriceComps(low=4300, median=4900, high=5600, n=4, sources=["https://a.example"])
 
     def decode(vin):
@@ -57,9 +61,9 @@ def real(monkeypatch):
 
 def test_real_mode_wiring_and_parallel_comps(real, monkeypatch):
     monkeypatch.setenv("TIREKICK_RUNS", "1")
-    t0 = time.time()
     r = verify.run_verification(deal(), "clips/honest.mp4")
-    assert time.time() - t0 < 0.39                           # analysis and comps overlapped
+    (a0, a1), (c0, c1) = real["analysis_span"], real["comps_span"]
+    assert c0 < a1 and a0 < c1                               # analysis and comps ran at the same time
     assert real["analysis_thread"] != real["comps_thread"]
     assert real["runs"] == 1 and real["vin"] == VIN and real["recalls"] == ("Honda", "Accord", 2003)
     assert r.verdict == Severity.GREEN and r.comps.n == 4
