@@ -82,4 +82,4 @@ listing mismatch, and an odometer reading of 98,412 mi against a listed 200,000.
 ## Links
 
 - Repo: https://github.com/Keshav-kh/tirekick
-- Demo video: (add after upload)
+- Demo video: https://youtu.be/oZptKwqpeaw

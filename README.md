@@ -16,7 +16,7 @@ We built it for the Meta Global AI Developer Hackathon (Indie track, "Build for 
 buyers in mind: students and young people buying a cheap first car, often with no one to bring along to
 look at it.
 
-Demo video: (link)
+**Demo video:** https://youtu.be/oZptKwqpeaw
 
 ## How it works
 
