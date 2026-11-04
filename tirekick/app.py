@@ -16,7 +16,7 @@ from pydantic import BaseModel
 
 from tirekick import orchestrator, store
 from tirekick.config import data_path, dev_mode, env
-from tirekick.report.render import render_report
+from tirekick.report.render import proof_video_path, render_report
 from tirekick.whatsapp.webhook import IncomingMessage, parse_incoming, verify_signature
 
 logging.basicConfig(level=logging.INFO)
@@ -41,8 +41,11 @@ def webhook_verify(request: Request):
 async def webhook_receive(request: Request, background: BackgroundTasks) -> dict:
     raw = await request.body()
     secret = env("WHATSAPP_APP_SECRET")
-    if secret and not verify_signature(raw, request.headers.get("X-Hub-Signature-256"), secret):
-        raise HTTPException(status_code=403, detail="bad signature")
+    if secret:
+        if not verify_signature(raw, request.headers.get("X-Hub-Signature-256"), secret):
+            raise HTTPException(status_code=403, detail="bad signature")
+    elif not dev_mode():  # without a secret, only dev mode may accept unsigned posts
+        raise HTTPException(status_code=403, detail="WHATSAPP_APP_SECRET not set")
     for msg in parse_incoming(json.loads(raw or b"{}")):
         background.add_task(orchestrator.handle_message, msg)  # reply 200 fast; work in background
     return {"ok": True}
@@ -66,6 +69,15 @@ def report_frame(deal_id: str, name: str):
     return FileResponse(path)
 
 
+@app.get("/r/{deal_id}/video")
+def report_video(deal_id: str):
+    deal = store.get_deal(deal_id) if re.match(r"^DEAL-\d{4}$", deal_id) else None
+    path = proof_video_path(deal) if deal else None
+    if path is None:
+        raise HTTPException(status_code=404)
+    return FileResponse(path)  # supports Range, so the page can seek to each evidence clip
+
+
 # --------------------------------------------------------------------------- dev only
 
 
@@ -80,11 +92,10 @@ class SimulatedMessage(BaseModel):
 
 
 @app.post("/dev/simulate")
-async def dev_simulate(request: Request) -> dict:
+def dev_simulate(body: dict) -> dict:  # sync: runs in the threadpool, so waiting on the orchestrator lock can't block the event loop
     """Fake an incoming WhatsApp message: {"from": "15551230001", "text": "...", "media_path": "x.mp4"}."""
     if not dev_mode():
         raise HTTPException(status_code=404)
-    body = await request.json()
     body["from_"] = body.pop("from", body.get("from_", ""))
     sim = SimulatedMessage.model_validate(body)
     media_type = sim.media_type or ("video/mp4" if (sim.media_path or "").lower().endswith((".mp4", ".mov"))
