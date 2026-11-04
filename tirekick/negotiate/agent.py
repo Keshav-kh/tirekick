@@ -180,13 +180,27 @@ def extract_price(text: str, asking: int) -> int | None:
     return found
 
 
+# "okay I can't go that low" is a refusal, not a deal: any refusal wording overrides "ok/yes/deal".
+REFUSAL = re.compile(
+    r"\b(can'?t|cannot|can not|won'?t|wont|couldn'?t|not (go|going|able|willing|possible|happening|interested)|"
+    r"no|no way|no deal|nope|too low|lowball|firm|not that low|best i can do is|don'?t think so|pass)\b",
+    re.IGNORECASE,
+)
+_HARMLESS_NO = re.compile(r"\bno (problem|worries|prob)\b", re.IGNORECASE)
+
+
+def is_acceptance(text: str | None) -> bool:
+    t = _HARMLESS_NO.sub("", text or "")
+    return bool(ACCEPT.search(t)) and not REFUSAL.search(t)
+
+
 def apply_seller_reply(state: NegotiationState, text: str) -> NegotiationState:
     s = state.model_copy(deep=True)
     price = extract_price(text, s.asking_price)
     s.turns.append(NegotiationTurn(role=ChatRole.SELLER, text=text, amount=price))
     s.rounds += 1
     s.status = NegotiationStatus.IN_PROGRESS
-    if price is None and ACCEPT.search(text or "") and s.last_offer is not None:
+    if price is None and is_acceptance(text) and s.last_offer is not None:
         s.last_seller_ask = s.last_offer
         s.status = NegotiationStatus.AGREED
     elif price is not None:

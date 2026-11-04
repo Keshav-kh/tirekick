@@ -30,7 +30,24 @@ def parse_recalls(payload: dict) -> list[Recall]:
     return out
 
 
+# vPIC names some sub-brands differently from the Recalls API. vPIC decodes a Scion as make "Toyota",
+# model "Scion tC"; the Recalls API only knows make "Scion", model "tC" (and 400s otherwise).
+SUB_BRANDS = ("Scion",)
+
+
+def nhtsa_make_model(make: str, model: str) -> tuple[str, str]:
+    """Map a vPIC / listing (make, model) to what the NHTSA Recalls API accepts."""
+    mk, md = (make or "").strip(), (model or "").strip()
+    for brand in SUB_BRANDS:
+        if md.lower().startswith(brand.lower() + " "):
+            return brand, md[len(brand):].strip()
+        if mk.lower() == brand.lower():
+            return brand, md
+    return mk, md
+
+
 def lookup_recalls(make: str, model: str, year: int, timeout: float = 10.0) -> list[Recall]:
+    make, model = nhtsa_make_model(make, model)
     key = re.sub(r"[^a-z0-9]+", "_", f"{make}_{model}_{year}".lower())
     cache = data_path("cache", "recalls", f"{key}.json")
     if cache.exists():

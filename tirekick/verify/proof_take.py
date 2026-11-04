@@ -201,7 +201,7 @@ def _run_native(video: str, challenge: ProofChallenge, listing: Listing, tempera
     raise muse.MuseError("native video failed: " + " | ".join(errors or ["all native routes disabled"]))
 
 
-# --------------------------------------------------------------------------- merging runs# --------------------------------------------------------------------------- merging runs
+# --------------------------------------------------------------------------- merging runs
 
 
 def _majority(values: list):
@@ -310,11 +310,16 @@ def analyze_proof_take(video_path: str, challenge: ProofChallenge, listing: List
 def _analyze(video_path: str, challenge: ProofChallenge, listing: Listing, runs: int) -> ProofTakeAnalysis:
     if not Path(video_path).is_file():
         return _empty(video_path, None, "video file not found")
+    mode = video_mode()
+    if not _ffmpeg_ok() and mode != "native":
+        # Misconfigured server: say so loudly. runs=0 makes build_report return RED ("couldn't be
+        # analyzed"), never a silent pass.
+        log.error("ffmpeg/ffprobe not found on PATH: proof videos cannot be analyzed in frames mode")
+        return _empty(video_path, None, "server misconfigured: ffmpeg/ffprobe not installed")
     duration = probe_duration(video_path)
     if duration is None and _ffmpeg_ok():
         return _empty(video_path, None, "not a readable video (ffprobe failed)")
 
-    mode = video_mode()
     temperature = 0.3 if runs > 1 else 0.2
     errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="tk_proof_") as tmp:

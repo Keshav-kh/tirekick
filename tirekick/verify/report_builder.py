@@ -168,6 +168,19 @@ def _video_checks(b: _Builder, a: ProofTakeAnalysis, challenge: ProofChallenge, 
                   f"The {label} light stays on after the engine starts.", V,
                   t0=obs.after_start_timestamp_s or a.engine_start_timestamp_s,
                   impact=0 if critical else LIGHT_ON_IMPACT)
+    if sweep_shown:
+        # A must-light the model couldn't see ("can't tell", or not reported at all) is not a pass:
+        # a blurry or far-away dashboard would otherwise hide a taped check-engine light.
+        by_name = {o.light: o for o in a.lights}
+        for name in sorted(must_light, key=lambda n: n.value):
+            obs = by_name.get(name)
+            if obs is None or obs.lit_at_key_on is None:
+                flagged = True
+                label = LIGHT_LABEL.get(name.value, name.value)
+                b.add(EvidenceType.WARNING_LIGHT_HIDDEN, Severity.YELLOW,
+                      f"We couldn't confirm the {label} light came on at key-on.", V,
+                      detail="Ask the seller to refilm the dashboard up close at key-on, before starting.",
+                      t0=(obs.key_on_timestamp_s if obs else None) or a.key_on_timestamp_s)
     lit = [o for o in a.lights if o.lit_at_key_on]
     if lit and not flagged:
         off_after = all(o.on_after_start is False for o in lit)
