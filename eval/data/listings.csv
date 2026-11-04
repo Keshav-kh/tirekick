@@ -1,0 +1,201 @@
+listing_id,source,url,date_collected,year,make,model,trim,engine,mileage,mileage_unit,asking_price,currency,vin,mentions_recall,notes
+usacars-2066,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,door,,,63291,mi,8305,USD,1FA6P0HD0E5355683,,title=clean vehicle; lot=167744884; state=arkansas
+usacars-236,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,dodge,door,,,74203,mi,10500,USD,2C3CDXCT3EH230364,,title=clean vehicle; lot=167758265; state=arizona
+usacars-35,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,door,,,27965,mi,11900,USD,1GKS2GKC2HR328793,,title=clean vehicle; lot=167692507; state=california
+usacars-2277,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,56255,mi,8000,USD,3N1CN7AP6JL831688,,title=clean vehicle; lot=167722937; state=california
+usacars-557,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,chevrolet,door,,,85315,mi,11200,USD,2GNFLFEK3H6341370,,title=clean vehicle; lot=167772982; state=pennsylvania
+usacars-505,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ram,door,,,30421,mi,11050,USD,1C6RR7PT3HS659994,,title=clean vehicle; lot=167668548; state=new jersey
+usacars-463,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,hyundai,door,,,88274,mi,8000,USD,KM8JUCAG9FU984199,,title=clean vehicle; lot=167607388; state=pennsylvania
+usacars-275,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,chevrolet,door,,,167600,mi,10300,USD,1GC4K0CGXDF194396,,title=clean vehicle; lot=167767134; state=washington
+usacars-2266,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,nissan,juke,,,58529,mi,8400,USD,JN8AF5MRXHT705637,,title=clean vehicle; lot=167722304; state=connecticut
+usacars-223,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,mpv,,,41455,mi,4530,USD,1FMZK1CM7HKB51015,,title=clean vehicle; lot=167656533; state=texas
+usacars-2195,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,27461,mi,13900,USD,3FA6P0LU5KR226287,,title=clean vehicle; lot=167802377; state=north carolina
+usacars-2276,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,door,,,53011,mi,13500,USD,1N4AA6APXGC432268,,title=clean vehicle; lot=167541540; state=louisiana
+usacars-1710,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,80612,mi,5000,USD,1FADP3F2XFL240127,,title=clean vehicle; lot=167598272; state=texas
+usacars-187,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,door,,,37176,mi,4160,USD,3FA6P0HD3HR199785,,title=clean vehicle; lot=167656520; state=texas
+usacars-1826,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,58913,mi,3800,USD,1FADP3K26DL359277,,title=clean vehicle; lot=167727764; state=south carolina
+usacars-1066,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,dodge,door,,,84109,mi,3700,USD,1C3CDFBAXDD150548,,title=clean vehicle; lot=167744124; state=alabama
+usacars-50,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,mpv,,,39886,mi,12710,USD,1GKS2BKC7HR133811,,title=clean vehicle; lot=167692513; state=california
+usacars-45,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,door,,,28972,mi,12520,USD,1GKS2GKCXHR324555,,title=clean vehicle; lot=167692509; state=california
+usacars-204,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,chevrolet,malibu,,,42090,mi,6000,USD,1G1ZB5ST8JF226848,,title=clean vehicle; lot=167765944; state=texas
+usacars-453,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,mercedes-benz,doors,,,48140,mi,10740,USD,WDDWK4JB2JF613298,,title=clean vehicle; lot=167692448; state=california
+usacars-480,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,chevrolet,door,,,105486,mi,4310,USD,2CNALDEC6B6382868,,title=clean vehicle; lot=167660398; state=florida
+usacars-1555,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,f-150,,,103862,mi,6500,USD,1FTNF1ET8EKG10382,,title=clean vehicle; lot=167787621; state=oregon
+usacars-1843,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,109672,mi,9200,USD,1FT7X2A68DEB25801,,title=clean vehicle; lot=167800810; state=texas
+usacars-39,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2003,ford,pk,,,176567,mi,7000,USD,1FTNX20P73ED69682,,title=clean vehicle; lot=167754187; state=tennessee
+usacars-1760,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,van,,,99544,mi,10700,USD,1FTYE1YM1GKB56631,,title=clean vehicle; lot=167606942; state=pennsylvania
+usacars-407,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,jeep,door,,,72732,mi,7770,USD,1C4RJFBG4EC441069,,title=clean vehicle; lot=167698716; state=new york
+usacars-2240,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,sentra,,,31037,mi,10900,USD,3N1AB7AP4KY222670,,title=clean vehicle; lot=167457191; state=arizona
+usacars-2122,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,taurus,,,13328,mi,12000,USD,1FAHP2E88HG132084,,title=clean vehicle; lot=167636134; state=missouri
+usacars-2225,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,45331,mi,10400,USD,JN1BJ1CP6JW106037,,title=clean vehicle; lot=167456344; state=florida
+usacars-2486,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,sentra,,,19646,mi,9500,USD,3N1AB7AP4KY350343,,title=clean vehicle; lot=167722605; state=california
+usacars-1050,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,dodge,door,,,109176,mi,11100,USD,1C4RDJAG0DC608666,,title=clean vehicle; lot=167738875; state=illinois
+usacars-456,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,chrysler,door,,,114119,mi,3450,USD,1C3BC1FG1BN519076,,title=clean vehicle; lot=167660385; state=florida
+usacars-1214,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,205796,mi,9900,USD,1FTBF2A6XFEB60033,,title=clean vehicle; lot=167771183; state=florida
+usacars-1824,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,door,,,87420,mi,3000,USD,1FADP3F22EL318074,,title=clean vehicle; lot=167727580; state=south carolina
+usacars-563,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,chevrolet,door,,,62739,mi,13200,USD,2GNFLFEK4H6351292,,title=clean vehicle; lot=167773002; state=pennsylvania
+usacars-2418,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,door,,,132655,mi,3000,USD,1N4AL3AP4FN890836,,title=clean vehicle; lot=167755716; state=pennsylvania
+usacars-8,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,chevrolet,malibu,,,9371,mi,14600,USD,1G1ZD5ST5JF191860,,title=clean vehicle; lot=167763267; state=florida
+usacars-2305,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2020,nissan,rogue,,,15387,mi,14700,USD,KNMAT2MV5LP500471,,title=clean vehicle; lot=167743353; state=pennsylvania
+usacars-2409,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,rogue,,,22041,mi,14100,USD,KNMAT2MV4GP710291,,title=clean vehicle; lot=167755074; state=pennsylvania
+usacars-317,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,jeep,mpv,,,43965,mi,6330,USD,1C4PJLDBXKD300679,,title=clean vehicle; lot=167698671; state=florida
+usacars-2221,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,41077,mi,10800,USD,JN1BJ1CP1JW105037,,title=clean vehicle; lot=167456337; state=florida
+usacars-2483,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,41220,mi,9200,USD,3N1CN7AP6JL883130,,title=clean vehicle; lot=167762213; state=florida
+usacars-776,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,chevrolet,door,,,82543,mi,14200,USD,3GCPCSE09DG282246,,title=clean vehicle; lot=167800650; state=texas
+usacars-2457,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,rogue,,,35065,mi,13900,USD,5N1AT2MT8JC761351,,title=clean vehicle; lot=167762104; state=florida
+usacars-308,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,infiniti,mpv,,,31713,mi,10400,USD,5N1DL0MM1KC552741,,title=clean vehicle; lot=167698670; state=florida
+usacars-448,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,gmc,door,,,148035,mi,8850,USD,1GT120C83BF236190,,title=clean vehicle; lot=167702770; state=utah
+usacars-2311,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,doors,,,45043,mi,8495,USD,1N4AZ0CP6FC322884,,title=clean vehicle; lot=167654206; state=new hampshire
+usacars-768,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,chevrolet,malibu,,,45836,mi,10200,USD,1G1ZD5STXJF175198,,title=clean vehicle; lot=167800168; state=texas
+usacars-2489,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,rogue,,,40259,mi,13900,USD,KNMAT2MT9JP582734,,title=clean vehicle; lot=167762219; state=florida
+usacars-203,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2005,dodge,pickup,,,219823,mi,8600,USD,3D7KS28C15G771945,,title=clean vehicle; lot=167756840; state=south carolina
+usacars-898,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,dodge,caravan,,,35991,mi,14800,USD,2C4RDGEG1HR716871,,title=clean vehicle; lot=167493381; state=florida
+usacars-211,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,mpv,,,55854,mi,7420,USD,1FMZK1CM1HKB51026,,title=clean vehicle; lot=167656529; state=texas
+usacars-835,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,caravan,,,54960,mi,13000,USD,2C4RDGCG2JR205677,,title=clean vehicle; lot=167724266; state=california
+usacars-796,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,chevrolet,cruze,,,32856,mi,9200,USD,3G1BE6SM0HS561566,,title=clean vehicle; lot=167802090; state=north carolina
+usacars-1847,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,ford,escape,,,42168,mi,11300,USD,1FMCU0F79JUD41148,,title=clean vehicle; lot=167801166; state=north carolina
+usacars-539,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,door,,,83915,mi,3800,USD,1N4AL3AP6FC102604,,title=clean vehicle; lot=167692884; state=california
+usacars-83,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,door,,,36139,mi,4640,USD,1FMCU0G95HUC13712,,title=clean vehicle; lot=167656258; state=texas
+usacars-2257,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,nissan,door,,,41729,mi,10800,USD,1N4AL3AP3HC221262,,title=clean vehicle; lot=167494664; state=florida
+usacars-1236,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,0,mi,4200,USD,1FADP3J23DL155179,,title=clean vehicle; lot=167773673; state=pennsylvania
+usacars-1666,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,door,,,93832,mi,7500,USD,1FMCU9G9XEUC07694,,title=clean vehicle; lot=167793429; state=missouri
+usacars-254,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2005,ford,chassis,,,225236,mi,4700,USD,1FDXF46P35EA79064,,title=clean vehicle; lot=167758702; state=florida
+usacars-893,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,dodge,journey,,,111628,mi,5800,USD,3C4PDDFG9DT523590,,title=clean vehicle; lot=167780745; state=wisconsin
+usacars-166,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,doors,,,52966,mi,6140,USD,2C3CDXBG0JH187083,,title=clean vehicle; lot=167656480; state=florida
+usacars-1735,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,escape,,,49254,mi,13600,USD,1FMCU9GDXKUA14655,,title=clean vehicle; lot=167602886; state=pennsylvania
+usacars-623,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,kia,sorento,,,53424,mi,14000,USD,5XYPGDA51HG221253,,title=clean vehicle; lot=167119104; state=connecticut
+usacars-2010,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,doors,,,62542,mi,13942,USD,1FATP8EM4F5415097,,title=clean vehicle; lot=167564843; state=new jersey
+usacars-1947,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,40505,mi,14900,USD,3FA6P0CD0KR117056,,title=clean vehicle; lot=167615300; state=minnesota
+usacars-839,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,dodge,door,,,85639,mi,8900,USD,2C3CDXBG5EH300547,,title=clean vehicle; lot=167771550; state=florida
+usacars-1807,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,door,,,98625,mi,4500,USD,1FA6P0HD9G5118807,,title=clean vehicle; lot=167725936; state=mississippi
+usacars-390,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2009,acura,door,,,179389,mi,3900,USD,19UUA96529A004646,,title=clean vehicle; lot=167389316; state=texas
+usacars-2228,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,40332,mi,10800,USD,JN1BJ1CP9JW108428,,title=clean vehicle; lot=167456351; state=florida
+usacars-143,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,doors,,,38910,mi,7210,USD,2C3CDXCT1JH233225,,title=clean vehicle; lot=167656472; state=florida
+usacars-87,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,chevrolet,equinox,,,12783,mi,14900,USD,2GNALCEK7H1548351,,title=clean vehicle; lot=167763692; state=florida
+usacars-2168,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,hybrid,,,37716,mi,12800,USD,3FA6P0LU4KR188583,,title=clean vehicle; lot=167802336; state=north carolina
+usacars-472,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,gmc,cab,,,119215,mi,5380,USD,1GT120CG5BF167316,,title=clean vehicle; lot=167702775; state=utah
+usacars-2323,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,door,,,19723,mi,7500,USD,3N1AB7AP9GY325347,,title=clean vehicle; lot=167750212; state=georgia
+usacars-587,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,chevrolet,colorado,,,11564,mi,14000,USD,1GCHSBEA7K1232845,,title=clean vehicle; lot=167774390; state=illinois
+usacars-169,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,doors,,,35461,mi,6760,USD,2C3CDZAG7JH321665,,title=clean vehicle; lot=167656483; state=florida
+usacars-2477,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,33078,mi,9100,USD,3N1CN7AP0JL882846,,title=clean vehicle; lot=167762210; state=florida
+usacars-220,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,doors,,,42426,mi,4130,USD,3FA6P0LU4HR246569,,title=clean vehicle; lot=167656532; state=texas
+usacars-2413,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,rogue,,,63738,mi,11000,USD,KNMAT2MVXGP669049,,title=clean vehicle; lot=167755083; state=pennsylvania
+usacars-2435,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,rogue,,,34692,mi,15000,USD,KNMAT2MT8KP524910,,title=clean vehicle; lot=167715810; state=florida
+usacars-1230,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,van,,,67150,mi,13700,USD,1FTYE2YG5GKA02732,,title=clean vehicle; lot=167773301; state=pennsylvania
+usacars-2041,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,doors,,,96246,mi,13487,USD,2FMTK4J95FBB24313,,title=clean vehicle; lot=167564973; state=new york
+usacars-842,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,dodge,door,,,76117,mi,8000,USD,3C4PDCGB7HT525941,,title=clean vehicle; lot=167772989; state=pennsylvania
+usacars-325,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,heartland,pioneer,,,1,mi,4050,USD,5SFPB3326JE365727,,title=clean vehicle; lot=167265963; state=pennsylvania
+usacars-856,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,dodge,van,,,94872,mi,4500,USD,2C4RDGCG3ER266428,,title=clean vehicle; lot=167777525; state=texas
+usacars-826,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,caravan,,,54106,mi,13700,USD,2C4RDGEG6JR205887,,title=clean vehicle; lot=167718054; state=north carolina
+usacars-437,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,infiniti,mpv,,,11047,mi,14750,USD,JN8AZ2NEXK9236071,,title=clean vehicle; lot=167256600; state=texas
+usacars-2186,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,31380,mi,13700,USD,3FA6P0LU6KR220563,,title=clean vehicle; lot=167802370; state=north carolina
+usacars-543,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2010,chevrolet,coupe,,,69622,mi,6470,USD,2G1FK1EJXA9163850,,title=clean vehicle; lot=167660492; state=florida
+usacars-2465,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,rogue,,,39885,mi,13900,USD,5N1AT2MT4JC764747,,title=clean vehicle; lot=167762112; state=florida
+usacars-2206,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,35374,mi,11450,USD,JN1BJ1CPXJW108745,,title=clean vehicle; lot=167456239; state=florida
+usacars-2112,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,90740,mi,4000,USD,3FA6P0HD9FR112940,,title=clean vehicle; lot=167632416; state=illinois
+usacars-148,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,mpv,,,19420,mi,10780,USD,1C4SDJCT1JC174166,,title=clean vehicle; lot=167656474; state=florida
+usacars-1894,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,38964,mi,13800,USD,3FA6P0LUXKR109398,,title=clean vehicle; lot=167615280; state=minnesota
+usacars-2334,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,door,,,98354,mi,12900,USD,1N6AD0EV8GN783236,,title=clean vehicle; lot=167612818; state=new jersey
+usacars-343,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,infiniti,mpv,,,20681,mi,10120,USD,5N1DL0MM2KC556913,,title=clean vehicle; lot=167698675; state=florida
+usacars-1653,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,ford,door,,,104559,mi,13500,USD,1FTFW1EF2CFA90460,,title=clean vehicle; lot=167793084; state=west virginia
+usacars-2256,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sentra,,,37088,mi,750,USD,3N1AB7AP3JY312956,,title=clean vehicle; lot=167494347; state=missouri
+usacars-2493,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,33027,mi,9200,USD,3N1CN7AP0JL883768,,title=clean vehicle; lot=167762224; state=florida
+usacars-326,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,infiniti,mpv,,,32611,mi,14810,USD,JN8AZ2NE0K9233910,,title=clean vehicle; lot=167698673; state=florida
+usacars-1239,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,ford,door,,,149346,mi,9000,USD,1FTFW1ET2CFC83729,,title=clean vehicle; lot=167773763; state=pennsylvania
+usacars-896,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,journey,,,28469,mi,13800,USD,3C4PDCGG9JT352215,,title=clean vehicle; lot=167491370; state=florida
+usacars-549,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,hyundai,door,,,142106,mi,3460,USD,5NPEB4AC2CH437716,,title=clean vehicle; lot=167697983; state=mississippi
+usacars-2069,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,130388,mi,12500,USD,1FTEW1CF5FKD41840,,title=clean vehicle; lot=167744885; state=arkansas
+usacars-2211,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,33644,mi,11400,USD,JN1BJ1CP5JW163832,,title=clean vehicle; lot=167456251; state=florida
+usacars-1752,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,edge,,,69428,mi,14300,USD,2FMPK4J8XGBC53478,,title=clean vehicle; lot=167606685; state=pennsylvania
+usacars-454,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,nissan,doors,,,34861,mi,3160,USD,3N1AB7AP0HY315498,,title=clean vehicle; lot=167668544; state=new jersey
+usacars-2208,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,33437,mi,11450,USD,JN1BJ1CP7JW161029,,title=clean vehicle; lot=167456241; state=florida
+usacars-740,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,chevrolet,impala,,,14939,mi,13700,USD,2G11Z5S30K9137729,,title=clean vehicle; lot=167796203; state=nevada
+usacars-106,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,ford,focus,,,21405,mi,8700,USD,1FADP3K23JL219764,,title=clean vehicle; lot=167755494; state=south carolina
+usacars-473,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,jeep,mpv,,,8930,mi,11000,USD,1C4HJXEG0KW596497,,title=clean vehicle; lot=167256941; state=michigan
+usacars-2482,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,altima,,,36974,mi,12100,USD,1N4BL4CV8KC157345,,title=clean vehicle; lot=167722413; state=california
+usacars-716,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,chevrolet,trax,,,44280,mi,10700,USD,3GNCJNSB1GL264970,,title=clean vehicle; lot=167792666; state=west virginia
+usacars-968,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,dodge,door,,,123882,mi,2300,USD,1C3CDZAG7CN309641,,title=clean vehicle; lot=167791160; state=texas
+usacars-547,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,honda,mpv,,,44129,mi,6900,USD,5J6RW1H81HL005542,,title=clean vehicle; lot=167702934; state=minnesota
+usacars-133,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,mpv,,,47085,mi,5690,USD,2C4RDGEG8JR337145,,title=clean vehicle; lot=167656466; state=florida
+usacars-440,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,kia,sportage,,,71991,mi,13000,USD,KNDPN3AC7H7113313,,title=clean vehicle; lot=167606881; state=new jersey
+usacars-1769,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,door,,,71205,mi,14500,USD,1FTFW1CF3EFA59580,,title=clean vehicle; lot=167609633; state=florida
+usacars-2242,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,versa,,,31335,mi,7300,USD,3N1CN7AP5KL850671,,title=clean vehicle; lot=167457385; state=arizona
+usacars-714,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,chevrolet,trax,,,77429,mi,8000,USD,KL7CJPSB3GB750120,,title=clean vehicle; lot=167792654; state=west virginia
+usacars-441,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,doors,,,29043,mi,3550,USD,3N1AB7AP2JY244200,,title=clean vehicle; lot=167692447; state=california
+usacars-2148,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,door,,,118340,mi,9000,USD,1FTEW1CM7EFA19352,,title=clean vehicle; lot=167641733; state=texas
+usacars-1534,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,door,,,29367,mi,12100,USD,3FA6P0H76GR145938,,title=clean vehicle; lot=167787432; state=oregon
+usacars-945,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,journey,,,14750,mi,14000,USD,3C4PDCBB1JT319818,,title=clean vehicle; lot=167787973; state=oklahoma
+usacars-2077,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,connect,,,118483,mi,8500,USD,NM0LS6E75F1193116,,title=clean vehicle; lot=167746107; state=florida
+usacars-1235,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,128753,mi,2200,USD,3FA6P0HR7DR120916,,title=clean vehicle; lot=167773664; state=pennsylvania
+usacars-286,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,doors,,,15854,mi,7340,USD,1FATP8UH7K5172626,,title=clean vehicle; lot=167693585; state=florida
+usacars-540,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,nissan,doors,,,40306,mi,3160,USD,3N1AB7AP0HY260843,,title=clean vehicle; lot=167668551; state=new jersey
+usacars-2491,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,35677,mi,9200,USD,3N1CN7AP7JL882312,,title=clean vehicle; lot=167762221; state=florida
+usacars-508,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,dodge,door,,,17355,mi,3570,USD,3C4PDCAB2FT637813,,title=clean vehicle; lot=167660417; state=georgia
+usacars-2472,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,33808,mi,9200,USD,3N1CN7AP3JL883781,,title=clean vehicle; lot=167762207; state=florida
+usacars-1679,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,35951,mi,14700,USD,3FA6P0LU8KR117368,,title=clean vehicle; lot=167570545; state=virginia
+usacars-537,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,hyundai,mpv,,,25847,mi,4750,USD,KM8J23A4XKU846404,,title=clean vehicle; lot=167697955; state=ohio
+usacars-1819,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,103960,mi,6200,USD,3FA6P0H71FR175122,,title=clean vehicle; lot=167727512; state=south carolina
+usacars-1092,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,dodge,door,,,94140,mi,9700,USD,3C4PDCDG6FT650328,,title=clean vehicle; lot=167800598; state=texas
+usacars-1818,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,door,,,45592,mi,10100,USD,3FA6P0H77HR214525,,title=clean vehicle; lot=167800378; state=texas
+usacars-956,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,dodge,caravan,,,39515,mi,14900,USD,2C4RDGCG9KR578507,,title=clean vehicle; lot=167715835; state=florida
+usacars-2393,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,versa,,,39985,mi,9900,USD,3N1CN7AP9KL804020,,title=clean vehicle; lot=167615760; state=minnesota
+usacars-2291,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,50871,mi,8000,USD,3N1CN7AP3JL818641,,title=clean vehicle; lot=167724482; state=california
+usacars-274,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fiesta,,,22881,mi,10300,USD,3FADP4BJ7KM123231,,title=clean vehicle; lot=167759385; state=missouri
+usacars-1565,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,13085,mi,10400,USD,3FA6P0T90KR253764,,title=clean vehicle; lot=167745369; state=pennsylvania
+usacars-1493,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,175640,mi,2000,USD,3FA6P0H72DR150212,,title=clean vehicle; lot=167552543; state=missouri
+usacars-202,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,doors,,,31563,mi,3160,USD,1FADP3E24HL348263,,title=clean vehicle; lot=167656526; state=texas
+usacars-89,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,door,,,36855,mi,11500,USD,1FMCU9GX9GUA57286,,title=clean vehicle; lot=167754531; state=pennsylvania
+usacars-234,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,bmw,door,,,80394,mi,6200,USD,WBAPH7G58BNN05983,,title=clean vehicle; lot=167766036; state=texas
+usacars-302,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2006,ford,wagon,,,26914,mi,720,USD,1FAFP36N06W137851,,title=clean vehicle; lot=167660576; state=florida
+usacars-2005,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,doors,,,102800,mi,12995,USD,1FA6P8AM4F5334930,,title=clean vehicle; lot=167564840; state=new jersey
+usacars-2446,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,nissan,rogue,,,46178,mi,13400,USD,KNMAT2MV3GP680121,,title=clean vehicle; lot=167762003; state=illinois
+usacars-2203,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,30902,mi,13800,USD,3FA6P0LU8KR225585,,title=clean vehicle; lot=167802381; state=north carolina
+usacars-2441,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sentra,,,10372,mi,11400,USD,3N1AB7APXJY272844,,title=clean vehicle; lot=167761650; state=illinois
+usacars-1834,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,115429,mi,5200,USD,1FMCU0GX7DUA39893,,title=clean vehicle; lot=167800648; state=texas
+usacars-129,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,dodge,caravan,,,59537,mi,11900,USD,2C4RDGCG3HR864989,,title=clean vehicle; lot=167755906; state=south carolina
+usacars-909,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,dodge,door,,,149332,mi,3000,USD,3C4PDCDG6CT146745,,title=clean vehicle; lot=167552614; state=missouri
+usacars-899,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,dodge,journey,,,62224,mi,8500,USD,3C4PDCABXHT695526,,title=clean vehicle; lot=167494494; state=missouri
+usacars-2232,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,sentra,,,1,mi,4000,USD,3N1AB7AP3KY284206,,title=clean vehicle; lot=167457183; state=arizona
+usacars-1284,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,door,,,39027,mi,13800,USD,1FMCU0GD5HUC74384,,title=clean vehicle; lot=167779689; state=wisconsin
+usacars-1630,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,cutaway,,,136661,mi,13000,USD,1FDWE3FS8DDA78168,,title=clean vehicle; lot=167569071; state=colorado
+usacars-517,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,nissan,doors,,,31954,mi,2900,USD,3N1AB7AP6HY249992,,title=clean vehicle; lot=167668549; state=new jersey
+usacars-1740,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,ford,focus,,,15075,mi,12600,USD,1FADP3M2XHL322025,,title=clean vehicle; lot=167604497; state=new jersey
+usacars-15,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,door,,,25747,mi,12710,USD,1GKS2GKC6HR328389,,title=clean vehicle; lot=167692497; state=california
+usacars-2234,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,rogue,,,26516,mi,14900,USD,5N1AT2MV3KC809079,,title=clean vehicle; lot=167457185; state=arizona
+usacars-241,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,mpv,,,66781,mi,6810,USD,2FMPK3K95GBB76939,,title=clean vehicle; lot=167656730; state=texas
+usacars-2205,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2020,nissan,altima,,,10728,mi,14400,USD,1N4BL4BV5LC127707,,title=clean vehicle; lot=167455277; state=arizona
+usacars-2402,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sentra,,,38761,mi,10400,USD,3N1AB7AP0JY322490,,title=clean vehicle; lot=167615932; state=minnesota
+usacars-2319,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,doors,,,37953,mi,11390,USD,1N4AZ0CP7FC314468,,title=clean vehicle; lot=167654210; state=new york
+usacars-2073,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,doors,,,65342,mi,12995,USD,2FMTK4G8XFBB98373,,title=clean vehicle; lot=167565142; state=new york
+usacars-2439,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,door,,,81699,mi,3800,USD,3N1AB7AP8FY311793,,title=clean vehicle; lot=167761429; state=texas
+usacars-2497,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,32557,mi,9200,USD,3N1CN7AP3JL883263,,title=clean vehicle; lot=167762227; state=florida
+usacars-2396,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,39247,mi,13300,USD,JN1BJ1CR7JW262489,,title=clean vehicle; lot=167615917; state=minnesota
+usacars-1121,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,dodge,door,,,40110,mi,7500,USD,2C3CDYAG0EH274494,,title=clean vehicle; lot=167641710; state=texas
+usacars-315,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,mpv,,,52904,mi,5520,USD,2GKFLTEK8H6226257,,title=clean vehicle; lot=167703312; state=virginia
+usacars-2337,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sentra,,,28880,mi,10900,USD,3N1AB7AP5JY332934,,title=clean vehicle; lot=167752730; state=tennessee
+usacars-5,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,mpv,,,45561,mi,5700,USD,2C4RDGEG9JR237989,,title=clean vehicle; lot=167655771; state=texas
+usacars-2253,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,rogue,,,32656,mi,12800,USD,KNMAT2MT3JP508547,,title=clean vehicle; lot=167492359; state=florida
+usacars-1537,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,ford,door,,,76572,mi,8700,USD,3FA6P0H76GR269546,,title=clean vehicle; lot=167787433; state=oregon
+usacars-358,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,jeep,mpv,,,47798,mi,6930,USD,1C4PJMDX4KD197521,,title=clean vehicle; lot=167698679; state=florida
+usacars-1558,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,140870,mi,6000,USD,1FTBF2B66DEA35574,,title=clean vehicle; lot=167787622; state=oregon
+usacars-230,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,ford,van,,,178703,mi,5700,USD,1FTSS3EL7EDA50076,,title=clean vehicle; lot=167758159; state=florida
+usacars-1998,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,hybrid,,,35023,mi,13500,USD,3FA6P0LU6KR119958,,title=clean vehicle; lot=167801804; state=florida
+usacars-647,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2016,chevrolet,malibu,,,67527,mi,9000,USD,1G1ZJ5SU8GF337274,,title=clean vehicle; lot=167780142; state=wisconsin
+usacars-2498,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,versa,,,31371,mi,9200,USD,3N1CN7AP4JL884311,,title=clean vehicle; lot=167762228; state=florida
+usacars-2317,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,doors,,,63933,mi,11590,USD,1N4AZ0CP4FC309194,,title=clean vehicle; lot=167654209; state=new hampshire
+usacars-2313,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sentra,,,42782,mi,9500,USD,3N1AB7AP3JY262463,,title=clean vehicle; lot=167602541; state=new jersey
+usacars-2470,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,nissan,door,,,75858,mi,3700,USD,3N1AB7AP4FY228278,,title=clean vehicle; lot=167762173; state=illinois
+usacars-2237,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,nissan,note,,,26743,mi,10400,USD,3N1CE2CP8KL362332,,title=clean vehicle; lot=167457188; state=arizona
+usacars-876,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,dodge,journey,,,34432,mi,14900,USD,3C4PDDEG9HT565166,,title=clean vehicle; lot=167473054; state=wisconsin
+usacars-324,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2017,gmc,mpv,,,35821,mi,5520,USD,2GKFLTEK8H6338184,,title=clean vehicle; lot=167703317; state=virginia
+usacars-1684,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2019,ford,fusion,,,24272,mi,14100,USD,3FA6P0LU1KR225363,,title=clean vehicle; lot=167749844; state=michigan
+usacars-1633,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,122861,mi,11200,USD,1FTFW1CT7DKG07754,,title=clean vehicle; lot=167790954; state=texas
+usacars-0,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2008,toyota,cruiser,,,274117,mi,6300,USD,JTEZU11F88K007763,,title=clean vehicle; lot=159348797; state=new jersey
+usacars-1839,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2013,ford,door,,,118593,mi,4700,USD,1FTEX1CM3DFA94061,,title=clean vehicle; lot=167800658; state=texas
+usacars-733,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2012,chevrolet,door,,,131791,mi,3300,USD,1GNKVJEDXCJ172991,,title=clean vehicle; lot=167723310; state=illinois
+usacars-1460,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2015,ford,door,,,136307,mi,5000,USD,1FA6P0H76F5128221,,title=clean vehicle; lot=167541538; state=louisiana
+usacars-27,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2014,buick,door,,,31039,mi,12000,USD,1G4PS5SK1E4188639,,title=clean vehicle; lot=167763299; state=ohio
+usacars-2215,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,nissan,sport,,,34962,mi,11050,USD,JN1BJ1CP7JW107732,,title=clean vehicle; lot=167456261; state=florida
+usacars-840,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,dodge,caravan,,,50193,mi,11500,USD,2C4RDGCG8JR208468,,title=clean vehicle; lot=167772963; state=pennsylvania
+usacars-691,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2018,chevrolet,malibu,,,41751,mi,13000,USD,1G1ZD5ST8JF242655,,title=clean vehicle; lot=167787968; state=oklahoma
+usacars-494,"kaggle_us_cars (AuctionExport, ~2020)",,dataset,2011,chevrolet,utility,,,114547,mi,8430,USD,3GNTKGE3XBG398052,,title=clean vehicle; lot=167660399; state=florida

@@ -28,3 +28,7 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# eval study CSVs (C) are committed; clips stay local
+!eval/data/
+eval/data/clips/

@@ -1,0 +1,7 @@
+attempt_id,spoof_type,clip,listing_json,challenge_code,expected_evidence,notes
+R01,ai_generated,eval/data/clips/aigen_honest_01.mp4,eval/data/listings_json/civic_aigen.json,K7Q2XM,take_has_cuts,AI-generated (Higgsfield) proof take with the right code; stitched from 4 clips
+R02,ai_generated,eval/data/clips/aigen_hidden_01.mp4,eval/data/listings_json/civic_aigen.json,K7Q2XM,warning_light_hidden;take_has_cuts,AI-generated take; check-engine and several other lights dark at key-on
+R03,old_video,eval/data/clips/aigen_nocode_01.mp4,eval/data/listings_json/civic_aigen.json,K7Q2XM,code_missing,No code shown at all (AI clip)
+R04,old_video,eval/data/clips/aigen_nocode_02.mp4,eval/data/listings_json/civic_aigen.json,K7Q2XM,code_missing,No code shown and lights dark (AI clip)
+R05,old_video,eval/data/clips/aigen_honest_01.mp4,eval/data/listings_json/civic_aigen.json,P4RTWE,code_missing,Clip shows K7Q2XM but this challenge issued P4RTWE (simulates a video filmed for an earlier challenge)
+R06,different_car,eval/data/clips/aigen_honest_01.mp4,eval/data/listings_json/corolla_other.json,K7Q2XM,vin_listing_mismatch;vin_mismatch_doors;vin_unreadable,Listing is a 2012 Toyota Corolla; the clip shows a Honda Civic

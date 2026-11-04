@@ -1,0 +1,126 @@
+{
+  "_note": "Synthetic car cards for the negotiation study (real friends) and the simulated-seller study. Each card's hidden_facts match the evidence TireKick's report finds. Prices are whole USD.",
+  "cards": [
+    {
+      "card_id": "card01",
+      "listing": {"year": 2014, "make": "Honda", "model": "Civic", "trim": "LX", "mileage": 98000,
+                  "asking": 9500, "description": "Automatic, silver, clean title. Runs great, new tires last year. Selling because I got a new car."},
+      "reservation": 8200, "buyer_max": 9300,
+      "comps": {"low": 8400, "median": 8900, "high": 9800, "n": 6},
+      "hidden_facts": ["There is an open airbag recall you never got fixed.",
+                       "The check-engine light was on last month; you cleared it but never fixed the cause."],
+      "evidence": [
+        {"type": "recall_found", "source": "recalls", "summary": "The VIN has an open airbag recall that hasn't been repaired", "price_impact": 300},
+        {"type": "warning_light_on", "source": "video", "summary": "The check-engine light stayed on after the engine started", "price_impact": 400}
+      ]
+    },
+    {
+      "card_id": "card02",
+      "listing": {"year": 2012, "make": "Toyota", "model": "Corolla", "trim": "LE", "mileage": 121000,
+                  "asking": 7800, "description": "Reliable daily driver, cold AC, no accidents. Price is negotiable a little."},
+      "reservation": 6700, "buyer_max": 7600,
+      "comps": {"low": 6800, "median": 7300, "high": 8100, "n": 5},
+      "hidden_facts": ["The real mileage is about 134,000, not 121,000. You typed the number from memory."],
+      "evidence": [
+        {"type": "odometer_mismatch", "source": "video", "summary": "The odometer in the video reads about 134,000 miles, not the 121,000 in the listing", "price_impact": 500}
+      ]
+    },
+    {
+      "card_id": "card03",
+      "listing": {"year": 2015, "make": "Nissan", "model": "Altima", "trim": "2.5 S", "mileage": 87000,
+                  "asking": 8900, "description": "One owner, garage kept, smooth CVT. Bluetooth and backup camera."},
+      "reservation": 7600, "buyer_max": 8700,
+      "comps": {"low": 7700, "median": 8300, "high": 9200, "n": 7},
+      "hidden_facts": ["The CVT transmission sometimes shudders when accelerating from a stop.",
+                       "There is an open recall for the hood latch."],
+      "evidence": [
+        {"type": "recall_found", "source": "recalls", "summary": "This model year has an open hood-latch recall that hasn't been repaired", "price_impact": 200}
+      ]
+    },
+    {
+      "card_id": "card04",
+      "listing": {"year": 2013, "make": "Ford", "model": "Focus", "trim": "SE", "mileage": 104000,
+                  "asking": 6500, "description": "Hatchback, great on gas, new battery. Small scratch on rear bumper."},
+      "reservation": 5300, "buyer_max": 6300,
+      "comps": {"low": 5200, "median": 5900, "high": 6700, "n": 6},
+      "hidden_facts": ["The ABS warning light comes on now and then and you don't know why.",
+                       "The transmission is a known weak point on this car and it shifts roughly."],
+      "evidence": [
+        {"type": "warning_light_on", "source": "video", "summary": "The ABS warning light stayed on after the engine started", "price_impact": 400}
+      ]
+    },
+    {
+      "card_id": "card05",
+      "listing": {"year": 2016, "make": "Hyundai", "model": "Elantra", "trim": "SE", "mileage": 76000,
+                  "asking": 10500, "description": "Clean inside and out, still has remote start. Never smoked in."},
+      "reservation": 9300, "buyer_max": 10300,
+      "comps": {"low": 9400, "median": 9900, "high": 10900, "n": 5},
+      "hidden_facts": ["There's an open recall on the car that you ignored the letters for."],
+      "evidence": [
+        {"type": "recall_found", "source": "recalls", "summary": "The VIN has an open safety recall that hasn't been repaired", "price_impact": 250}
+      ]
+    },
+    {
+      "card_id": "card06",
+      "listing": {"year": 2011, "make": "Honda", "model": "Accord", "trim": "EX", "mileage": 142000,
+                  "asking": 7200, "description": "Sunroof, leather, very reliable. Highway miles mostly."},
+      "reservation": 6000, "buyer_max": 7000,
+      "comps": {"low": 6100, "median": 6700, "high": 7500, "n": 6},
+      "hidden_facts": ["The car burns some oil; you top it up every few weeks.",
+                       "The check-engine light comes on sometimes."],
+      "evidence": [
+        {"type": "warning_light_on", "source": "video", "summary": "The check-engine light stayed on after the engine started", "price_impact": 350}
+      ]
+    },
+    {
+      "card_id": "card07",
+      "listing": {"year": 2014, "make": "Mazda", "model": "Mazda3", "trim": "i Sport", "mileage": 92000,
+                  "asking": 8300, "description": "Fun to drive, manual transmission, no accidents. New brakes."},
+      "reservation": 7100, "buyer_max": 8100,
+      "comps": {"low": 7200, "median": 7800, "high": 8600, "n": 5},
+      "hidden_facts": ["The mileage is actually around 101,000; the listing number is old."],
+      "evidence": [
+        {"type": "odometer_mismatch", "source": "video", "summary": "The odometer in the video reads about 101,000 miles, not the 92,000 in the listing", "price_impact": 300}
+      ]
+    },
+    {
+      "card_id": "card08",
+      "listing": {"year": 2013, "make": "Chevrolet", "model": "Cruze", "trim": "LT", "mileage": 110000,
+                  "asking": 5900, "description": "Runs and drives good, cold AC, new tires. Must sell this week."},
+      "reservation": 4800, "buyer_max": 5700,
+      "comps": {"low": 4900, "median": 5400, "high": 6200, "n": 6},
+      "hidden_facts": ["The coolant warning light comes on sometimes; there might be a small leak.",
+                       "There is an open recall on the car."],
+      "evidence": [
+        {"type": "recall_found", "source": "recalls", "summary": "The VIN has an open recall that hasn't been repaired", "price_impact": 200},
+        {"type": "warning_light_on", "source": "video", "summary": "The coolant temperature warning light came on during the video", "price_impact": 400}
+      ]
+    },
+    {
+      "card_id": "card09",
+      "listing": {"year": 2015, "make": "Toyota", "model": "Camry", "trim": "SE", "mileage": 99000,
+                  "asking": 11800, "description": "Sporty SE trim, well maintained, all records. Firm-ish on price."},
+      "reservation": 10600, "buyer_max": 11600,
+      "comps": {"low": 10700, "median": 11300, "high": 12200, "n": 7},
+      "hidden_facts": ["The real mileage is about 108,000.",
+                       "There is an open recall you haven't done."],
+      "evidence": [
+        {"type": "odometer_mismatch", "source": "video", "summary": "The odometer in the video reads about 108,000 miles, not the 99,000 in the listing", "price_impact": 400},
+        {"type": "recall_found", "source": "recalls", "summary": "The VIN has an open safety recall that hasn't been repaired", "price_impact": 200}
+      ]
+    },
+    {
+      "card_id": "card10",
+      "listing": {"year": 2012, "make": "Kia", "model": "Optima", "trim": "LX", "mileage": 118000,
+                  "asking": 6800, "description": "Clean title, good tires, recently serviced. Selling to upgrade."},
+      "reservation": 5600, "buyer_max": 6600,
+      "comps": {"low": 5700, "median": 6300, "high": 7100, "n": 5},
+      "hidden_facts": ["This engine family has a known recall for engine failure, and yours hasn't been checked.",
+                       "The check-engine light flickers on sometimes."],
+      "evidence": [
+        {"type": "recall_found", "source": "recalls", "summary": "The VIN has an open engine recall that hasn't been inspected", "price_impact": 500},
+        {"type": "warning_light_on", "source": "video", "summary": "The check-engine light stayed on after the engine started", "price_impact": 300}
+      ]
+    }
+  ]
+}
