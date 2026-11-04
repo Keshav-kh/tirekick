@@ -27,7 +27,7 @@ def test_day1_fake_mode_prints_gates(tmp_path):
 
 def test_day1_refuses_real_mode_without_key(tmp_path):
     r = run("day1_test.py", "--clips", "tests/fixtures/day1_sample.csv", tmp_path=tmp_path,
-            env_extra={"TIREKICK_FAKE_AI": "0"})
+            env_extra={"TIREKICK_FAKE_AI": "0", "META_API_KEY": "", "MODEL_API_KEY": ""})  # beats a local .env
     assert r.returncode != 0 and "META_API_KEY" in r.stderr
 
 
