@@ -31,4 +31,10 @@ Thumbs.db
 
 # eval study CSVs (C) are committed; clips stay local
 !eval/data/
-eval/data/clips/
+eval/data/clips/*
+# ...except the five Higgsfield source pieces our evaluation was run on (stitched by eval/stitch_clips.py)
+!eval/data/clips/paper.mp4
+!eval/data/clips/sticker.mp4
+!eval/data/clips/odometer.mp4
+!eval/data/clips/dash_honest.mp4
+!eval/data/clips/dash_hidden.mp4
