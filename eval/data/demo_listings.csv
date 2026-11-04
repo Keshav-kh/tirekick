@@ -1,0 +1,4 @@
+listing_id,source,url,date_collected,year,make,model,trim,engine,mileage,mileage_unit,asking_price,currency,vin,mentions_recall,notes
+demo-01,craigslist (Brooklyn; cars by owner),,2026-11-03,2020,Nissan,Sentra,S,,83000,mi,7900,USD,3N1AB8BV0LY286158,no,"Opened and screenshotted by hand. Listing says clean title, runs great."
+demo-02,craigslist (Brooklyn; cars by owner),,2026-11-03,2004,Honda,Element,LX,,200000,mi,2700,USD,5J6YH28374L035266,no,"Opened and screenshotted by hand. Listing type 'sedan' but door sticker says MPV; specs say 4wd, description says all wheel drive."
+demo-03,craigslist (Brooklyn; cars by owner),,2026-11-03,2005,Toyota,Scion tC,,,170000,mi,1700,USD,JTKDE177250032203,no,"Opened and screenshotted by hand. Listed as 'Toyota Scion'; Scion is its own make in NHTSA."
