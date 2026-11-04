@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TireKick on Marketplace</title>
+<style>
+  /* Marketplace + Messenger. Facebook's surfaces and type stack; TireKick's own mark. */
+  :root {
+    --canvas: #F0F2F5;
+    --card: #FFFFFF;
+    --ink: #050505;
+    --sub: #65676B;
+    --line: #CED0D4;
+    --blue: #0866FF;
+    --msgr: #0A7CFF;
+    --in: #E4E6EB;
+    --hover: #F2F2F2;
+    --red: #E41E3F;
+    --yellow: #F7B928;
+    --green: #31A24C;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--canvas); color: var(--ink);
+    font: 15px/1.3333 "Segoe UI Historic", "Segoe UI", Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; -webkit-font-smoothing: antialiased;
+  }
+  button, select, textarea, input { font: inherit; color: inherit; }
+
+  /* Top bar */
+  .topbar {
+    height: 56px; flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px;
+    background: var(--card); box-shadow: 0 1px 2px rgba(0, 0, 0, .1); position: relative; z-index: 2;
+  }
+  .mark { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); display: grid; place-items: center; flex: none; }
+  .search {
+    display: flex; align-items: center; gap: 8px; width: 260px; height: 40px; padding: 0 14px;
+    border-radius: 20px; background: var(--canvas); color: var(--sub);
+  }
+  .tabs { display: flex; gap: 4px; margin: 0 auto; align-self: stretch; }
+  .tab { display: grid; place-items: center; padding: 0 28px; color: var(--sub); font-weight: 600; border-bottom: 3px solid transparent; }
+  .tab.on { color: var(--blue); border-bottom-color: var(--blue); }
+  .reset { margin-left: auto; background: #E4E6EB; border: 0; border-radius: 6px; padding: 8px 14px; font-weight: 600; cursor: pointer; }
+  .reset:hover { background: #D8DADF; }
+
+  /* Page */
+  main {
+    flex: 1; min-height: 0; display: grid; gap: 16px; padding: 16px;
+    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Marketplace listing */
+  .item { align-self: start; background: var(--card); border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, .2); overflow: hidden; }
+  .photo { aspect-ratio: 4 / 3; background: #DADDE1; display: grid; place-items: center; }
+  .item-body { padding: 12px 16px 16px; }
+  .price { font-size: 24px; font-weight: 700; line-height: 1.2; }
+  .item h1 { margin: 4px 0 0; font-size: 20px; font-weight: 600; line-height: 1.2; }
+  .listed { margin: 6px 0 0; color: var(--sub); font-size: 13px; }
+  .facts { margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+  .facts div { display: flex; gap: 8px; align-items: baseline; }
+  .facts dt { color: var(--sub); min-width: 92px; font-size: 14px; }
+  .facts dd { margin: 0; font-weight: 600; font-size: 14px; }
+
+  /* The TireKick check on the listing */
+  .check { margin-top: 14px; border-radius: 8px; background: var(--canvas); padding: 12px; }
+  .check-head { display: flex; align-items: center; gap: 10px; }
+  .check-badge { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #DADDE1; flex: none; transition: background .3s; }
+  .check[data-v="red"] .check-badge { background: var(--red); }
+  .check[data-v="amber"] .check-badge { background: var(--yellow); }
+  .check[data-v="green"] .check-badge { background: var(--green); }
+  .check-title { font-weight: 600; }
+  .check-sub { color: var(--sub); font-size: 13px; }
+  .check ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+  .check li { display: flex; gap: 8px; }
+  .check li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex: none; background: var(--sub); }
+  .check li.r::before { background: var(--red); }
+  .check li.y::before { background: var(--yellow); }
+  .check li.g::before { background: var(--green); }
+  .check a { display: inline-block; margin-top: 10px; color: var(--blue); font-weight: 600; text-decoration: none; }
+  .check a:hover { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { .check-badge { transition: none; } }
+
+  /* Messenger windows */
+  .phone { display: flex; flex-direction: column; min-height: 0; }
+  .owner { margin: 0 0 8px 2px; font-size: 15px; font-weight: 600; color: var(--sub); }
+  .chat { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--card); border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, .2); overflow: hidden; }
+  .chat-head { flex: none; display: flex; align-items: center; gap: 10px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, .1); position: relative; }
+  .av { position: relative; width: 40px; height: 40px; border-radius: 50%; background: var(--blue); display: grid; place-items: center; flex: none; }
+  .av::after { content: ""; position: absolute; right: -1px; bottom: -1px; width: 12px; height: 12px; border-radius: 50%; background: var(--green); border: 2px solid #fff; }
+  .who strong { display: block; font-size: 15px; font-weight: 600; }
+  .who span { display: block; color: var(--sub); font-size: 13px; }
+
+  .log { flex: 1; overflow-y: auto; padding: 12px 12px 8px; display: flex; flex-direction: column; }
+  .when { align-self: center; margin: 8px 0 10px; color: var(--sub); font-size: 12px; font-weight: 600; }
+  .hint { margin: auto 24px; color: var(--sub); text-align: center; }
+
+  .msg { max-width: 78%; margin-top: 2px; padding: 8px 12px; border-radius: 18px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.3333; }
+  .msg.me { align-self: flex-end; background: var(--msgr); color: #fff; }
+  .msg.me + .msg.me { border-top-right-radius: 4px; }
+  .msg.me:has(+ .msg.me) { border-bottom-right-radius: 4px; }
+  .msg.bot { align-self: flex-start; margin-left: 36px; background: var(--in); position: relative; }
+  .msg.bot + .msg.bot { border-top-left-radius: 4px; }
+  .msg.bot:has(+ .msg.bot) { border-bottom-left-radius: 4px; }
+  .msg.bot:not(:has(+ .msg.bot))::after {
+    content: ""; position: absolute; left: -36px; bottom: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.4'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='2.8'/%3E%3Cpath d='M12 4v5.2M12 14.8V20M4 12h5.2M14.8 12H20'/%3E%3C/svg%3E") center / 18px no-repeat;
+  }
+  .msg + .msg.me, .msg + .msg.bot { margin-top: 2px; }
+  .msg.me + .msg.bot, .msg.bot + .msg.me, .msg.bot + .chips + .msg.me { margin-top: 10px; }
+  .msg a { color: inherit; text-decoration: underline; }
+  .msg img { display: block; max-width: 100%; border-radius: 12px; margin: 4px 0 6px; }
+
+  /* Messenger quick replies: outlined pills under the bot's message */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 6px 36px; }
+  .chips button {
+    border: 1px solid var(--msgr); background: #fff; color: var(--msgr); border-radius: 18px;
+    padding: 6px 14px; font-weight: 600; font-size: 14px; cursor: pointer;
+  }
+  .chips button:hover { background: #EBF5FF; }
+  .chips.used { display: none; }
+
+  .video { display: grid; place-items: center; width: 220px; max-width: 100%; aspect-ratio: 16 / 10; border-radius: 12px; margin: -4px -8px 6px; background: #1C1E21; }
+  .video span { width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, .25); display: grid; place-items: center; }
+  .msg.me.media { background: none; padding: 0; color: var(--sub); font-size: 12px; text-align: right; }
+  .msg.me.media .video { margin: 0 0 4px; }
+
+  /* Share card for the join link */
+  .share { align-self: flex-start; margin: 4px 0 2px 36px; width: min(280px, 78%); border-radius: 18px; overflow: hidden; background: var(--in); }
+  .share-top { padding: 12px 14px; }
+  .share-top b { display: block; font-weight: 600; }
+  .share-top small { color: var(--sub); font-size: 13px; }
+  .join { display: block; width: 100%; padding: 10px; border: 0; border-top: 1px solid var(--line); background: #fff; color: var(--blue); font-weight: 600; cursor: pointer; }
+  .join:hover { background: var(--hover); }
+
+  /* Composer */
+  .composer { flex: none; padding: 8px 10px 10px; }
+  .row { display: flex; align-items: flex-end; gap: 6px; }
+  .icon-btn { width: 36px; height: 36px; flex: none; border: 0; border-radius: 50%; background: none; color: var(--msgr); display: grid; place-items: center; cursor: pointer; }
+  .icon-btn:hover, .icon-btn[aria-expanded="true"] { background: var(--hover); }
+  textarea { flex: 1; min-width: 0; resize: none; height: 36px; max-height: 110px; padding: 8px 14px; border: 0; border-radius: 18px; background: var(--canvas); font-size: 15px; line-height: 1.3333; }
+  textarea::placeholder { color: var(--sub); }
+  textarea:focus { outline: none; }
+  .send { width: 36px; height: 36px; flex: none; border: 0; border-radius: 50%; background: none; color: var(--msgr); display: grid; place-items: center; cursor: pointer; }
+  .send:hover { background: var(--hover); }
+  .send[disabled] { color: var(--line); cursor: wait; }
+  .attach { display: none; gap: 8px; align-items: center; margin-bottom: 8px; padding: 10px; border-radius: 8px; background: var(--canvas); }
+  .attach.open { display: flex; flex-wrap: wrap; }
+  .attach label { width: 100%; font-size: 13px; color: var(--sub); }
+  .attach select, .attach input[type=file] { flex: 1 1 160px; min-width: 0; padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 14px; }
+  .attach button { border: 0; border-radius: 6px; padding: 8px 12px; background: var(--blue); color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
+
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  @media (max-width: 1180px) {
+    main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .item { grid-column: 1 / -1; display: grid; grid-template-columns: 260px 1fr; }
+    .photo { aspect-ratio: auto; min-height: 100%; }
+    .tabs, .search { display: none; }
+  }
+  @media (max-width: 760px) {
+    html, body { height: auto; }
+    main { flex: none; grid-template-columns: minmax(0, 1fr); padding: 10px; }
+    .item { display: block; }
+    .photo { aspect-ratio: 4 / 3; }
+    .chat { flex: none; height: 75vh; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="mark" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v5.8M12 15.2V21M3 12h5.8M15.2 12H21"/></svg>
+  </div>
+  <div class="search" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Search Marketplace
+  </div>
+  <nav class="tabs" aria-hidden="true"><span class="tab on">Marketplace</span><span class="tab">Messages</span></nav>
+  <button class="reset" id="reset" type="button">Start over</button>
+</header>
+
+<main>
+  <article class="item" aria-label="Listing">
+    <div class="photo" aria-hidden="true">
+      <svg width="120" height="64" viewBox="0 0 120 64" fill="#BCC0C4"><path d="M18 40l8-15c2-4 6-6 10-6h40c5 0 9 2 12 6l10 13 10 2c4 1 6 4 6 7v6c0 2-2 3-4 3h-8a11 11 0 01-22 0H40a11 11 0 01-22 0h-8c-2 0-4-1-4-3v-7c0-4 4-6 12-6zm14-1h24V24H40c-2 0-4 1-5 3zm30 0h28l-8-11c-2-3-4-4-7-4H62z"/><circle cx="29" cy="53" r="7"/><circle cx="91" cy="53" r="7"/></svg>
+    </div>
+    <div class="item-body">
+      <div class="price" id="item-price">Waiting for a listing</div>
+      <h1 id="item-title">Paste a Marketplace listing in the buyer's chat</h1>
+      <p class="listed" id="item-listed">TireKick reads the text and checks the VIN.</p>
+      <dl class="facts" id="item-facts" hidden>
+        <div><dt>Buyer's max</dt><dd id="item-max"></dd></div>
+        <div><dt>Similar cars</dt><dd id="item-comps"></dd></div>
+        <div><dt>VIN</dt><dd id="item-vin"></dd></div>
+      </dl>
+      <section class="check" id="cluster" aria-live="polite">
+        <div class="check-head">
+          <div class="check-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.8"/><path d="M12 4v5.2M12 14.8V20M4 12h5.2M14.8 12H20"/></svg>
+          </div>
+          <div>
+            <div class="check-title">TireKick check</div>
+            <div class="check-sub" id="verdict">Waiting for the seller's proof video</div>
+          </div>
+        </div>
+        <ul id="check-list"></ul>
+        <a id="check-link" href="#" target="_blank" rel="noopener" hidden>See the full report</a>
+      </section>
+    </div>
+  </article>
+
+  <section class="phone" aria-label="Buyer chat">
+    <p class="owner">Buyer's Messenger</p>
+    <div class="chat">
+      <div class="chat-head">
+        <div class="av" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.8"/><path d="M12 4v5.2M12 14.8V20M4 12h5.2M14.8 12H20"/></svg></div>
+        <div class="who"><strong>TireKick</strong><span id="buyer-status">Active now</span></div>
+      </div>
+      <div class="log" id="buyer-log">
+        <p class="hint" id="buyer-empty">Paste a used-car listing and your max price, like "max 9000".</p>
+      </div>
+      <form class="composer" id="buyer-form">
+        <div class="attach" id="buyer-attach">
+          <label for="buyer-file">Send a screenshot of the listing</label>
+          <input type="file" id="buyer-file" accept="image/*">
+          <button type="button" id="buyer-file-send">Send screenshot</button>
+        </div>
+        <div class="row">
+          <button class="icon-btn" type="button" data-toggle="buyer-attach" aria-expanded="false" aria-label="Attach a screenshot">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z"/></svg>
+          </button>
+          <textarea id="buyer-text" placeholder="Aa" aria-label="Buyer message" rows="1"></textarea>
+          <button class="send" type="submit" aria-label="Send">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.6 20.3L21.5 12 2.6 3.7l-.1 6.5L15 12 2.5 13.8z"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="phone" aria-label="Seller chat">
+    <p class="owner">Seller's Messenger</p>
+    <div class="chat">
+      <div class="chat-head">
+        <div class="av" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.8"/><path d="M12 4v5.2M12 14.8V20M4 12h5.2M14.8 12H20"/></svg></div>
+        <div class="who"><strong>TireKick</strong><span id="seller-status">Active now</span></div>
+      </div>
+      <div class="log" id="seller-log">
+        <p class="hint" id="seller-empty">The buyer's link shows up here once they've sent a listing.</p>
+      </div>
+      <form class="composer" id="seller-form">
+        <div class="attach" id="seller-attach">
+          <label for="seller-clip">Send a proof video from this computer</label>
+          <select id="seller-clip"><option value="">Choose a video</option></select>
+          <button type="button" id="seller-clip-send">Send video</button>
+          <label for="seller-file">Or upload one</label>
+          <input type="file" id="seller-file" accept="video/*">
+          <button type="button" id="seller-file-send">Upload and send</button>
+        </div>
+        <div class="row">
+          <button class="icon-btn" type="button" data-toggle="seller-attach" aria-expanded="false" aria-label="Attach a video">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z"/></svg>
+          </button>
+          <textarea id="seller-text" placeholder="Aa" aria-label="Seller message" rows="1"></textarea>
+          <button class="send" type="submit" aria-label="Send">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.6 20.3L21.5 12 2.6 3.7l-.1 6.5L15 12 2.5 13.8z"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+const PEOPLE = { buyer: "15550000101", seller: "15550000202" };
+const BY_NUMBER = { [PEOPLE.buyer]: "buyer", [PEOPLE.seller]: "seller" };
+let since = new Date().toISOString();
+const seen = new Set();
+const lastAt = { buyer: 0, seller: 0 };
+let joined = false;
+let busy = 0;
+const PLAY = '<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>';
+
+function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+
+// *bold* and bare links, built with DOM nodes (no innerHTML from the server).
+function richText(node, text) {
+  const parts = String(text).split(/(\*[^*\n]+\*|https?:\/\/\S+)/g);
+  for (const p of parts) {
+    if (!p) continue;
+    if (/^\*[^*\n]+\*$/.test(p)) node.appendChild(el("strong", null, p.slice(1, -1)));
+    else if (/^https?:\/\//.test(p)) { const a = el("a", null, p); a.href = p; a.target = "_blank"; a.rel = "noopener"; node.appendChild(a); }
+    else node.appendChild(document.createTextNode(p));
+  }
+  return node;
+}
+
+function log(side) { return document.getElementById(side + "-log"); }
+function clearEmpty(side) { const e = document.getElementById(side + "-empty"); if (e) e.remove(); }
+function scroll(side) { const l = log(side); l.scrollTop = l.scrollHeight; }
+
+// Messenger shows a centred time when a conversation picks up after a pause.
+function timeDivider(side, at) {
+  const t = at ? new Date(at).getTime() : Date.now();
+  if (t - lastAt[side] > 5 * 60 * 1000) {
+    log(side).appendChild(el("div", "when", new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })));
+  }
+  lastAt[side] = t;
+}
+
+function addMine(side, text, media) {
+  clearEmpty(side);
+  timeDivider(side);
+  const box = el("div", "msg me" + (media ? " media" : ""));
+  if (media) {
+    const v = el("div", "video"); const s = el("span"); s.innerHTML = PLAY; v.appendChild(s); box.appendChild(v);
+    box.appendChild(document.createTextNode(text));
+  } else {
+    box.textContent = text;
+  }
+  log(side).appendChild(box);
+  scroll(side);
+}
+
+// The listing card fills in from TireKick's own messages to the buyer.
+function updateListing(text) {
+  const title = text.match(/^📋 \*(.+?)\*/);
+  if (title) {
+    document.getElementById("item-title").textContent = title[1].trim();
+    const ask = text.match(/Asking (\S+)/);
+    if (ask) document.getElementById("item-price").textContent = ask[1];
+    const max = text.match(/your max (\S+)/);
+    const comps = text.match(/Similar cars: ([^\n]+)/);
+    document.getElementById("item-max").textContent = max ? max[1] : "not given";
+    document.getElementById("item-comps").textContent = comps ? comps[1] : "none found yet";
+    document.getElementById("item-vin").textContent = /check digit ✅/.test(text) ? "Passes the check digit" : "Not checked yet";
+    document.getElementById("item-facts").hidden = false;
+    document.getElementById("item-listed").textContent = "Listed on Marketplace. TireKick is helping the buyer.";
+  }
+  const verdicts = [["🛑", "red", "Don't buy"], ["⚠️", "amber", "OK to negotiate, a few flags"], ["✅", "green", "Looks clean"]];
+  for (const [mark, color, label] of verdicts) {
+    if (!text.startsWith(mark + " *")) continue;
+    document.getElementById("cluster").dataset.v = color;
+    document.getElementById("verdict").textContent = label;
+    const list = document.getElementById("check-list");
+    list.replaceChildren();
+    for (const line of text.split("\n").slice(1)) {
+      const kind = line.startsWith("🔴") ? "r" : line.startsWith("🟡") ? "y" : line.startsWith("🟢") ? "g" : null;
+      if (kind) list.appendChild(el("li", kind, line.replace(/^\S+\s/, "")));
+    }
+    const link = text.match(/https?:\/\/\S+\/r\/DEAL-\d{4}/);
+    if (link) { const a = document.getElementById("check-link"); a.href = link[0]; a.hidden = false; }
+  }
+}
+
+function addBot(entry) {
+  const side = BY_NUMBER[entry.to];
+  if (!side) return;
+  clearEmpty(side);
+  timeDivider(side, entry.at);
+  const box = el("div", "msg bot");
+  let text = "";
+  if (entry.type === "text") text = entry.text.body;
+  else if (entry.type === "interactive") text = entry.interactive.body.text;
+  else if (entry.type === "image") {
+    const img = el("img"); img.src = entry.image.link; img.alt = entry.image.caption || "Evidence frame";
+    box.appendChild(img); text = entry.image.caption || "";
+  }
+  richText(box, text);
+  log(side).appendChild(box);
+  if (entry.type === "interactive") {
+    const chips = el("div", "chips");
+    for (const b of entry.interactive.action.buttons) {
+      const btn = el("button", null, b.reply.title);
+      btn.type = "button";
+      btn.onclick = () => { if (chips.classList.contains("used")) return; chips.classList.add("used"); send(side, { button_id: b.reply.id, text: b.reply.title }); };
+      chips.appendChild(btn);
+    }
+    log(side).appendChild(chips);
+  }
+  if (side === "buyer") updateListing(text);
+  const code = side === "buyer" && !joined && text.match(/DEAL-\d{4}/);
+  if (code) offerJoin(code[0]);
+  scroll(side);
+}
+
+// The buyer forwards their link; in the seller's Messenger it arrives as a share card.
+function offerJoin(dealId) {
+  clearEmpty("seller");
+  timeDivider("seller");
+  const card = el("div", "share");
+  const top = el("div", "share-top");
+  top.appendChild(el("b", null, "Show your car to a buyer"));
+  top.appendChild(el("small", null, "TireKick link for " + dealId));
+  card.appendChild(top);
+  const b = el("button", "join", "Open link");
+  b.type = "button";
+  b.onclick = () => { joined = true; card.remove(); send("seller", { text: dealId }); };
+  card.appendChild(b);
+  log("seller").appendChild(card);
+  scroll("seller");
+}
+
+async function poll() {
+  try {
+    const r = await fetch("/dev/outbox?limit=300");
+    const { messages } = await r.json();
+    for (const m of messages) {
+      if (seen.has(m.id) || (m.at && m.at < since)) continue;
+      seen.add(m.id);
+      addBot(m);
+    }
+  } catch (e) { /* server restarting; try again next tick */ }
+}
+
+function typing(side, on) {
+  document.getElementById(side + "-status").textContent = on ? (side === "seller" ? "Checking your video…" : "Typing…") : "Active now";
+}
+
+async function send(side, body) {
+  if (body.media_path) addMine(side, body.media_path.split("/").pop(), true);
+  else if (body.text) addMine(side, body.text, false);
+  busy++;
+  document.querySelectorAll(".send").forEach(b => b.disabled = true);
+  typing(side, true);
+  try {
+    const r = await fetch("/dev/simulate", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ from: PEOPLE[side], ...body }) });
+    if (!r.ok) addBot({ to: PEOPLE[side], type: "text", text: { body: "The demo server returned an error (" + r.status + "). Check its terminal." } });
+  } catch (e) {
+    addBot({ to: PEOPLE[side], type: "text", text: { body: "Can't reach the demo server. Check that it's still running." } });
+  } finally {
+    busy--;
+    typing(side, false);
+    if (!busy) document.querySelectorAll(".send").forEach(b => b.disabled = false);
+    await poll();
+  }
+}
+
+for (const side of ["buyer", "seller"]) {
+  document.getElementById(side + "-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const box = document.getElementById(side + "-text");
+    const text = box.value.trim();
+    if (!text) return;
+    box.value = "";
+    box.style.height = "";
+    send(side, { text });
+  });
+  const ta = document.getElementById(side + "-text");
+  ta.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); document.getElementById(side + "-form").requestSubmit(); }
+  });
+  ta.addEventListener("input", () => { ta.style.height = ""; ta.style.height = Math.min(ta.scrollHeight, 110) + "px"; });
+}
+
+document.querySelectorAll("[data-toggle]").forEach(btn => {
+  btn.onclick = () => {
+    const open = document.getElementById(btn.dataset.toggle).classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+  };
+});
+function closeAttach(side) {
+  document.getElementById(side + "-attach").classList.remove("open");
+  document.querySelector(`[data-toggle="${side}-attach"]`).setAttribute("aria-expanded", "false");
+}
+
+async function upload(inputId, side) {
+  const f = document.getElementById(inputId).files[0];
+  if (!f) return;
+  closeAttach(side);
+  const r = await fetch("/demo/upload?name=" + encodeURIComponent(f.name), { method: "POST", body: f });
+  if (!r.ok) { addBot({ to: PEOPLE[side], type: "text", text: { body: "That file wasn't sent. Send an .mp4 or .mov video, or an image." } }); return; }
+  const { path } = await r.json();
+  send(side, { media_path: path });
+}
+document.getElementById("buyer-file-send").onclick = () => upload("buyer-file", "buyer");
+document.getElementById("seller-file-send").onclick = () => upload("seller-file", "seller");
+document.getElementById("seller-clip-send").onclick = () => {
+  const p = document.getElementById("seller-clip").value;
+  if (!p) return;
+  closeAttach("seller");
+  send("seller", { media_path: p });
+};
+
+fetch("/demo/clips").then(r => r.json()).then(({ clips }) => {
+  const sel = document.getElementById("seller-clip");
+  for (const c of clips) { const o = el("option", null, c.split("/").pop()); o.value = c; sel.appendChild(o); }
+});
+
+document.getElementById("reset").onclick = async () => {
+  await Promise.all(["buyer", "seller"].map(s => fetch("/dev/simulate", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ from: PEOPLE[s], text: "reset" }) })));
+  location.reload();
+};
+
+setInterval(poll, 1500);
+</script>
+</body>
+</html>

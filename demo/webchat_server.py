@@ -39,6 +39,14 @@ def demo_page() -> str:
     return PAGE.read_text(encoding="utf-8")
 
 
+@app.get("/demo/facebook", response_class=HTMLResponse)
+def demo_page_facebook() -> str:
+    """Same demo, styled as Marketplace + Messenger (the US flow: a Facebook Marketplace listing)."""
+    if not dev_mode():
+        raise HTTPException(status_code=404, detail="set TIREKICK_DEV=1")
+    return PAGE.with_name("facebook.html").read_text(encoding="utf-8")
+
+
 @app.get("/demo/clips")
 def demo_clips() -> dict:
     """Videos already on this machine that the seller can 'send' as a proof take."""
